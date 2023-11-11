@@ -13,7 +13,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestConnection(t *testing.T) {
-	config.LoadEnv("../../../.env")
+	config.LoadEnv()
 
 	conn := NewConnection()
 	db, err := conn.Connection()
