@@ -4,12 +4,21 @@ import (
 	"log"
 
 	"github.com/caarlos0/env"
+	"github.com/joho/godotenv"
 )
 
-func init() {
+func LoadEnv(path string) {
 	config := &config{}
 
+	if err := godotenv.Load(path); err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
 	if err := env.Parse(&config.Server); err != nil {
+		log.Fatalf("env load error: %v", err)
+	}
+
+	if err := env.Parse(&config.Cockroach); err != nil {
 		log.Fatalf("env load error: %v", err)
 	}
 	Config = config
