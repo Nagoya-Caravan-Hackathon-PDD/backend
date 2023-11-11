@@ -10,8 +10,10 @@ import (
 func LoadEnv(path string) {
 	config := &config{}
 
-	if err := godotenv.Load(path); err != nil {
-		log.Fatalf("Error loading .env file")
+	if path != "" {
+		if err := godotenv.Load(path); err != nil {
+			log.Fatalf("Error loading .env file")
+		}
 	}
 
 	if err := env.Parse(&config.Server); err != nil {
