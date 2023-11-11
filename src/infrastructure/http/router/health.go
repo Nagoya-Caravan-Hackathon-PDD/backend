@@ -10,20 +10,22 @@ import (
 )
 
 func (router *router) Health() {
+	router.Mux.Handle("/health", buildChain(
+		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			hc := controllers.NewHealthController(
+				interactors.NewHealthInteractor(
+					gateways.NewHealthGateway(router.db),
+					persenters.NewHealthPresenter(w),
+				),
+			)
 
-	router.Mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		hc := controllers.NewHealthController(
-			interactors.NewHealthInteractor(
-				gateways.NewHealthGateway(router.db),
-				persenters.NewHealthPresenter(w),
-			),
-		)
-
-		switch r.Method {
-		case http.MethodGet:
-			hc.Health(w, r)
-		default:
-			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
-		}
-	})
+			switch r.Method {
+			case http.MethodGet:
+				hc.Health(w, r)
+			default:
+				http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+			}
+		}),
+		router.middleware.Recovery,
+	))
 }
