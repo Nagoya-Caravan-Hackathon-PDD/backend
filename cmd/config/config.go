@@ -7,10 +7,10 @@ import (
 )
 
 func init() {
-	var Config = &config{}
+	config := &config{}
 
-	if err := env.Parse(Config); err != nil {
-		log.Fatalf("Failed to parse config: %v", err)
+	if err := env.Parse(&config.Server); err != nil {
+		log.Fatalf("env load error: %v", err)
 	}
-
+	Config = config
 }

@@ -4,6 +4,6 @@ var Config = &config{}
 
 type config struct {
 	Server struct {
-		Port string `envconfig:"SERVER_PORT" default:"8080"`
+		Port string `env:"SERVER_ADDR" envDefault:"localhost:8080"`
 	}
 }
