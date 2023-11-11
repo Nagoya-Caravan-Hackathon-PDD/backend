@@ -14,6 +14,7 @@ func LoadEnv(path ...string) {
 		if err := godotenv.Load(path...); err != nil {
 			log.Fatalf("Error loading .env file")
 		}
+		log.Println("load .env file")
 	}
 
 	if err := env.Parse(&config.Server); err != nil {

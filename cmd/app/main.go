@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"log"
 
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/cmd/config"
@@ -10,7 +11,17 @@ import (
 )
 
 func main() {
-	config.LoadEnv()
+	var (
+		usedotEnv = flag.Bool("usedotenv", false, "use .env file")
+		path      = flag.String("path", ".env", "path to .env file")
+	)
+	flag.Parse()
+
+	if *usedotEnv {
+		config.LoadEnv(*path)
+	} else {
+		config.LoadEnv()
+	}
 
 	dbconn := postgres.NewConnection()
 	defer dbconn.Close(context.Background())
