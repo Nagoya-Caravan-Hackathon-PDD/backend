@@ -7,13 +7,14 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func LoadEnv(path string) {
+func LoadEnv(path ...string) {
 	config := &config{}
 
-	if path != "" {
-		if err := godotenv.Load(path); err != nil {
+	if path != nil {
+		if err := godotenv.Load(path...); err != nil {
 			log.Fatalf("Error loading .env file")
 		}
+		log.Println("load .env file")
 	}
 
 	if err := env.Parse(&config.Server); err != nil {
