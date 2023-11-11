@@ -17,7 +17,7 @@ type Connection interface {
 	Close(ctx context.Context) error
 }
 
-type gormDatabaseConnection struct {
+type pqDatabaseConnection struct {
 	dsn string
 
 	connectAttempts        int
@@ -51,7 +51,7 @@ func NewConnection() Connection {
 		connectWaitTimeSeconds = 3
 	}
 
-	conn := &gormDatabaseConnection{
+	conn := &pqDatabaseConnection{
 		dsn:                    dsn,
 		connectAttempts:        connectAttempts,
 		connectBlocks:          config.Config.Cockroach.ConnectBlocks,
@@ -64,7 +64,7 @@ func NewConnection() Connection {
 	return conn
 }
 
-func (c *gormDatabaseConnection) Connection() (*sql.DB, error) {
+func (c *pqDatabaseConnection) Connection() (*sql.DB, error) {
 	c.updateDBStatus()
 
 	if c.status != READY {
@@ -79,7 +79,7 @@ func (c *gormDatabaseConnection) Connection() (*sql.DB, error) {
 }
 
 // tryConnect attempts opening single connection to the database.
-func (c *gormDatabaseConnection) tryConnect() {
+func (c *pqDatabaseConnection) tryConnect() {
 	if !c.connecting {
 		c.connect()
 	} else if c.connectBlocks {
@@ -88,10 +88,10 @@ func (c *gormDatabaseConnection) tryConnect() {
 	}
 }
 
-func (c *gormDatabaseConnection) connect() {
+func (c *pqDatabaseConnection) connect() {
 	c.connecting = true
 
-	gormConnect := func() (*sql.DB, error) {
+	pqConnect := func() (*sql.DB, error) {
 		return sql.Open("postgres", c.dsn)
 	}
 	sleep := func(seconds int) {
@@ -100,7 +100,7 @@ func (c *gormDatabaseConnection) connect() {
 
 	if c.connectAttempts < 0 {
 		for c.status != READY {
-			c.conn, c.connectError = gormConnect()
+			c.conn, c.connectError = pqConnect()
 			c.updateDBStatus()
 
 			if c.status != READY {
@@ -109,11 +109,11 @@ func (c *gormDatabaseConnection) connect() {
 			}
 		}
 
-		log.Printf("connected with gorm to postgres")
+		log.Printf("connected with pq to postgres")
 	} else {
 		var err error
 		for i := 0; i < c.connectAttempts; i++ {
-			c.conn, err = gormConnect()
+			c.conn, err = pqConnect()
 			c.updateDBStatus()
 
 			if c.status != READY {
@@ -123,7 +123,7 @@ func (c *gormDatabaseConnection) connect() {
 					sleep(c.connectWaitTimeSeconds)
 				}
 			} else {
-				log.Printf("connected with gorm to postgres")
+				log.Printf("connected with pq to postgres")
 				break
 			}
 		}
@@ -140,11 +140,11 @@ func (c *gormDatabaseConnection) connect() {
 	}()
 }
 
-func (c *gormDatabaseConnection) isConnNil() bool {
+func (c *pqDatabaseConnection) isConnNil() bool {
 	return utils.IsInterfaceNil(c.conn)
 }
 
-func (c *gormDatabaseConnection) updateDBStatus() {
+func (c *pqDatabaseConnection) updateDBStatus() {
 	if c.isConnNil() {
 		c.status = NOT_READY
 		return
@@ -163,8 +163,8 @@ func (c *gormDatabaseConnection) updateDBStatus() {
 }
 
 // Close closes the connection to the database.
-func (c *gormDatabaseConnection) Close(ctx context.Context) error {
-	log.Printf("closing gorm postgres db connection")
+func (c *pqDatabaseConnection) Close(ctx context.Context) error {
+	log.Printf("closing pq postgres db connection")
 
 	if c.isConnNil() {
 		log.Printf("no connection to close")
