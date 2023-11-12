@@ -21,5 +21,6 @@ func (i *HealthInteractor) CheckDB(reqQuery input.HealthRequest) error {
 			return i.outputport.Failed(err)
 		}
 	}
+
 	return i.outputport.Success()
 }

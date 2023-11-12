@@ -27,5 +27,6 @@ func (router *router) Health() {
 			}
 		}),
 		router.middleware.Recovery,
+		router.middleware.CORS,
 	))
 }

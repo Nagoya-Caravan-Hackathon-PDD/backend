@@ -18,8 +18,11 @@ func NewHealthPresenter(w http.ResponseWriter) *healthPresenter {
 
 func (p *healthPresenter) Success() error {
 	p.w.WriteHeader(http.StatusOK)
+	res := output.HealthResponse{
+		Message: "OK",
+	}
 
-	if err := json.NewEncoder(p.w).Encode(output.HealthResponse{Message: "OK"}); err != nil {
+	if err := json.NewEncoder(p.w).Encode(res); err != nil {
 		http.Error(p.w, "Internal Server Error", http.StatusInternalServerError)
 		return err
 	}
