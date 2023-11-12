@@ -10,7 +10,7 @@ import (
 )
 
 func (router *router) Health() {
-	router.Mux.Handle("/health", buildChain(
+	router.Mux.Handle("/v1/health", buildChain(
 		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			hc := controllers.NewHealthController(
 				interactors.NewHealthInteractor(
