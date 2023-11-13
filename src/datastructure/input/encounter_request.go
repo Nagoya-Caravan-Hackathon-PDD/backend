@@ -5,8 +5,8 @@ type CreateEncounterReqeuest struct {
 	EncountedUserID string `json:"encounted_user_id"`
 }
 
-type GetEncounterRequest struct {
-	UserID   string `param:"user_id"`
-	PageSize int    `query:"page_size"`
-	PageID   int    `query:"page_id"`
+type ListEncounterRequest struct {
+	UserID   string `query:"user_id"`
+	PageSize uint   `query:"page_size"`
+	PageID   uint   `query:"page_id"`
 }
