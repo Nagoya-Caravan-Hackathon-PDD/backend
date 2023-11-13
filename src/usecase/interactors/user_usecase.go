@@ -19,7 +19,7 @@ func NewUserInteractor(store dai.UserDai, outputport ports.UserOutput) *UserInte
 }
 
 func (i *UserInteractor) Create(reqBody types.CreateUser) (int, *output.CreateUserResponse) {
-	if len(reqBody.GitHubID) == 0 {
+	if len(reqBody.GitHubID) == 0 || len(reqBody.UserID) == 0 {
 		return i.outputport.Create(echo.ErrBadRequest)
 	}
 	return i.outputport.Create(i.store.Create(reqBody))
