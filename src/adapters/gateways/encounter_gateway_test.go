@@ -8,7 +8,9 @@ import (
 
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/pkg/utils"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/types"
+	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5/pgconn"
+	"github.com/lib/pq"
 )
 
 func createEncounter(t *testing.T, users []types.CreateUser) types.CreateEncounter {
@@ -60,6 +62,39 @@ func TestCreateEncounter(t *testing.T) {
 				CreatedAt:       time.Now().Add(time.Second),
 			},
 			wantErr: types.AlreadyExists,
+		},
+		{
+			name: "user not found",
+			arg: types.CreateEncounter{
+				EncounterID:     "encounter_id2",
+				UserID:          "not_found_user_id",
+				EncountedUserID: users[0].UserID,
+				CreatedAt:       time.Now().Add(time.Second * 2),
+			},
+			wantErr:     &pq.Error{},
+			wantErrCode: pgerrcode.ForeignKeyViolation,
+		},
+		{
+			name: "encounted user not found",
+			arg: types.CreateEncounter{
+				EncounterID:     "encounter_id3",
+				UserID:          users[0].UserID,
+				EncountedUserID: "not_found_user_id",
+				CreatedAt:       time.Now().Add(time.Second * 3),
+			},
+			wantErr:     &pq.Error{},
+			wantErrCode: pgerrcode.ForeignKeyViolation,
+		},
+		{
+			name: "user and encounted user are same",
+			arg: types.CreateEncounter{
+				EncounterID:     "encounter_id4",
+				UserID:          users[0].UserID,
+				EncountedUserID: users[0].UserID,
+				CreatedAt:       time.Now().Add(time.Second * 4),
+			},
+			wantErr:     &pq.Error{},
+			wantErrCode: pgerrcode.CheckViolation,
 		},
 	}
 
