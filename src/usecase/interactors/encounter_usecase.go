@@ -26,7 +26,7 @@ func NewEncounterInteracter(store dai.EncounterDai, outputPort ports.EncounterOu
 
 func (i *EncounterInteracter) Create(reqBody input.CreateEncounterReqeuest) (int, *output.CreateEncounterResponse) {
 	if len(reqBody.UserID) == 0 || len(reqBody.EncountedUserID) == 0 {
-		return i.outputPort.CreateEncounterResponse(echo.ErrBadRequest)
+		return i.outputPort.CreateEncounterResponse("", echo.ErrBadRequest)
 	}
 	return i.outputPort.CreateEncounterResponse(i.store.Create(types.CreateEncounter{
 		EncounterID:     uuid.New().String(),
@@ -34,4 +34,18 @@ func (i *EncounterInteracter) Create(reqBody input.CreateEncounterReqeuest) (int
 		EncountedUserID: reqBody.EncountedUserID,
 		CreatedAt:       time.Now(),
 	}))
+}
+
+func (i *EncounterInteracter) List(arg input.ListEncounterRequest) (int, []*output.ListEncounterResponse) {
+
+	if len(arg.UserID) == 0 {
+		return i.outputPort.GetEncounterResponse(nil, echo.ErrBadRequest)
+	}
+	if arg.PageID == 0 {
+		arg.PageID = 0
+	}
+	if arg.PageSize == 0 {
+		arg.PageSize = 10
+	}
+	return i.outputPort.GetEncounterResponse(i.store.ReadAll(arg))
 }

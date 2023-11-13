@@ -3,6 +3,7 @@ package gateways
 import (
 	"database/sql"
 
+	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/input"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/types"
 )
 
@@ -25,26 +26,45 @@ func (eg *encounterGateway) getLocalEncounterCounts(userID, encountedUserID stri
 	return count
 }
 
-func (eg *encounterGateway) Create(arg types.CreateEncounter) error {
+func (eg *encounterGateway) Create(arg types.CreateEncounter) (string, error) {
 	const query = `INSERT INTO encounters (encounter_id,from_user_id, to_user_id,created_at) VALUES ($1,$2,$3,$4)`
 	count := eg.getLocalEncounterCounts(arg.UserID, arg.EncountedUserID)
 
 	if count != 0 {
-		return types.AlreadyExists
+		return "", types.AlreadyExists
 	}
 
 	result, err := eg.db.Exec(query, arg.EncounterID, arg.UserID, arg.EncountedUserID, arg.CreatedAt)
 	if err != nil {
-		return err
+		return "", err
 	}
 	row, err := result.RowsAffected()
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	if row != 1 {
-		return types.InsertFailed
+		return "", types.InsertFailed
 	}
 
-	return nil
+	return arg.EncounterID, nil
+}
+
+func (eg *encounterGateway) ReadAll(arg input.ListEncounterRequest) ([]types.ReadEncounter, error) {
+	const query = `SELECT * FROM encounters WHERE from_user_id = $1 LIMIT $2 OFFSET $3`
+	row, err := eg.db.Query(query, arg.UserID, arg.PageSize, (arg.PageID-1)*arg.PageSize)
+	if err != nil {
+		return nil, err
+	}
+	defer row.Close()
+
+	var encounters []types.ReadEncounter
+	for row.Next() {
+		var encounter types.ReadEncounter
+		if err := row.Scan(&encounter.EncounterID, &encounter.UserID, &encounter.EncountedUserID, &encounter.CreatedAt); err != nil {
+			return nil, err
+		}
+		encounters = append(encounters, encounter)
+	}
+	return encounters, nil
 }
