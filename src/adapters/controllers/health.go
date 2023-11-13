@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/input"
@@ -21,6 +22,7 @@ func (h *healthController) Health(ctx echo.Context) error {
 	var reqQuery input.HealthRequest
 
 	if err := ctx.Bind(&reqQuery); err != nil {
+		log.Println(err)
 		return ctx.JSON(http.StatusBadRequest, err)
 	}
 
