@@ -28,6 +28,10 @@ func (i *UserInteractor) Create(reqBody types.CreateUser) (int, *output.CreateUs
 func (i *UserInteractor) Read(input.GetUser) (int, *output.ReadUserResponse) {
 	return i.outputport.Read(nil)
 }
-func (i *UserInteractor) Delete(input.DeleteUsers) (int, *output.DeleteUserResponse) {
-	return i.outputport.Delete(nil)
+
+func (i *UserInteractor) Delete(reqQuery input.DeleteUsers) (int, *output.DeleteUserResponse) {
+	if len(reqQuery.UserID) == 0 {
+		return i.outputport.Delete(echo.ErrBadRequest)
+	}
+	return i.outputport.Delete(i.store.Delete(reqQuery.UserID))
 }
