@@ -29,7 +29,6 @@ func NewRouter(db *sql.DB) *echo.Echo {
 	}), echoMiddleware.Recover())
 
 	router.Health()
-	router.userRouter()
 
 	return router.echo
 }
