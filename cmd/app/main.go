@@ -55,9 +55,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to Create Instance:%v", err)
 	}
-	if err := m.Up(); err != nil {
-		log.Fatalf("failed to migrate up:%v", err)
-	}
+	m.Up()
 
 	server.NewHTTPserver(db).Run()
 }
