@@ -6,11 +6,8 @@ import (
 	"log"
 
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/cmd/config"
-	psqlDriver "github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/driver/postgres"
+	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/driver/postgres"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/infrastructure/server"
-	"github.com/golang-migrate/migrate/v4"
-	"github.com/golang-migrate/migrate/v4/database/postgres"
-	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
 // @title PDD-GitHub-Go-Backend API
@@ -37,25 +34,14 @@ func main() {
 	} else {
 		config.LoadEnv()
 	}
-	dbconn := psqlDriver.NewConnection()
+	log.Println(config.Config)
+	dbconn := postgres.NewConnection()
 	defer dbconn.Close(context.Background())
 
 	db, err := dbconn.Connection()
 	if err != nil {
 		log.Fatalf("failed to connect to database :%v", err)
 	}
-
-	driver, err := postgres.WithInstance(db, &postgres.Config{})
-	if err != nil {
-		log.Fatalf("failed to Create Instance:%v", err)
-	}
-	m, err := migrate.NewWithDatabaseInstance(
-		"file://cmd/migration",
-		"postgres", driver)
-	if err != nil {
-		log.Fatalf("failed to Create Instance:%v", err)
-	}
-	m.Up()
 
 	server.NewHTTPserver(db).Run()
 }
