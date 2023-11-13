@@ -6,7 +6,7 @@ import (
 
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/input"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/usecase/ports"
-	"github.com/bytedance/go-tagexpr/v2/binding"
+	"github.com/labstack/echo/v4"
 )
 
 type healthController struct {
@@ -17,14 +17,13 @@ func NewHealthController(usecase ports.HealthInput) *healthController {
 	return &healthController{usecase}
 }
 
-func (h *healthController) Health(w http.ResponseWriter, r *http.Request) {
+func (h *healthController) Health(ctx echo.Context) error {
 	var reqQuery input.HealthRequest
 
-	if err := binding.New(nil).Bind(&reqQuery, r, nil); err != nil {
-		log.Println("failed to bind and validate request :", err)
-		http.Error(w, "Bad Request", http.StatusBadRequest)
-		return
+	if err := ctx.Bind(&reqQuery); err != nil {
+		log.Println(err)
+		return ctx.JSON(http.StatusBadRequest, err)
 	}
 
-	h.usecase.CheckDB(reqQuery)
+	return ctx.JSON(h.usecase.CheckDB(reqQuery))
 }

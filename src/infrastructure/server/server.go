@@ -16,6 +16,6 @@ func NewHTTPserver(db *sql.DB) *httpServer {
 }
 
 func (s *httpServer) Run() {
-	router := router.NewRouter(s.db)
-	runWithGracefulShutdown(router.Mux)
+	serv := router.NewRouter(s.db)
+	runWithGracefulShutdown(serv)
 }
