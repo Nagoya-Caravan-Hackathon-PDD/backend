@@ -2,10 +2,10 @@ package gateways
 
 import (
 	"errors"
-	"log"
 	"reflect"
 	"testing"
 
+	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/pkg/utils"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/types"
 	"github.com/lib/pq"
 
@@ -13,7 +13,19 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
+func createOneUser(t *testing.T) types.CreateUser {
+	arg := types.CreateUser{
+		UserID:   utils.RandomString(10),
+		GitHubID: utils.RandomString(10),
+	}
+	if err := NewUserGateway(dbconn).Create(arg); err != nil {
+		t.Fatal(err)
+	}
+	return arg
+}
+
 func TestCreate(t *testing.T) {
+	migrateUp(t)
 	defer migrateDown(t)
 	g := NewUserGateway(dbconn)
 
@@ -50,7 +62,6 @@ func TestCreate(t *testing.T) {
 			} else {
 				var pgErr *pgconn.PgError
 				if errors.As(err, &pgErr) {
-					log.Println(pgErr.Code)
 					if pgErr.Code != tc.wantErrCode {
 						t.Errorf("got %v, want %v", pgErr.Code, tc.wantErrCode)
 					}
@@ -88,7 +99,6 @@ func testRead(t *testing.T) {
 			} else {
 				var pgErr *pgconn.PgError
 				if errors.As(err, &pgErr) {
-					log.Println(pgErr.Code)
 					if pgErr.Code != tc.wantErrCode {
 						t.Errorf("got %v, want %v", pgErr.Code, tc.wantErrCode)
 					}
@@ -129,7 +139,6 @@ func testDelete(t *testing.T) {
 			} else {
 				var pgErr *pgconn.PgError
 				if errors.As(err, &pgErr) {
-					log.Println(pgErr.Code)
 					if pgErr.Code != tc.wantErrCode {
 						t.Errorf("got %v, want %v", pgErr.Code, tc.wantErrCode)
 					}
