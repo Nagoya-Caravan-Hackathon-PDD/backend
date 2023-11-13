@@ -32,6 +32,16 @@ func migrateInstance() (mig *migrate.Migrate, err error) {
 	return
 }
 
+func migrateUp(t *testing.T) {
+	mig, err := migrateInstance()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	mig.Up()
+	return
+}
+
 func migrateDown(t *testing.T) {
 	t.Cleanup(func() {
 		mig, err := migrateInstance()
@@ -54,14 +64,6 @@ func TestMain(m *testing.M) {
 		log.Println(err)
 		os.Exit(1)
 	}
-
-	mig, err := migrateInstance()
-	if err != nil {
-		log.Println(err)
-		os.Exit(1)
-	}
-
-	mig.Up()
 
 	os.Exit(m.Run())
 }
