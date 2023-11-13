@@ -2,7 +2,6 @@ package gateways
 
 import (
 	"database/sql"
-	"log"
 
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/input"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/types"
@@ -65,7 +64,6 @@ func (eg *encounterGateway) ReadAll(arg input.ListEncounterRequest) ([]types.Rea
 		if err := row.Scan(&encounter.EncounterID, &encounter.UserID, &encounter.EncountedUserID, &encounter.CreatedAt); err != nil {
 			return nil, err
 		}
-		log.Println(encounter)
 		encounters = append(encounters, encounter)
 	}
 	return encounters, nil

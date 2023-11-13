@@ -1,7 +1,6 @@
 package presenters
 
 import (
-	"log"
 	"net/http"
 	"reflect"
 
@@ -39,9 +38,7 @@ func (p *encounterPresenter) CreateEncounterResponse(encounterID string, err err
 }
 
 func (p *encounterPresenter) GetEncounterResponse(args []types.ReadEncounter, err error) (int, []*output.ListEncounterResponse) {
-	log.Println(args, err)
 	if err != nil {
-		log.Println(err)
 		switch reflect.TypeOf(err) {
 		case reflect.TypeOf(&pq.Error{}):
 			return http.StatusBadRequest, nil
