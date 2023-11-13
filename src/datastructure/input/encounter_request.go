@@ -9,3 +9,7 @@ type ListEncounterRequest struct {
 	PageSize uint   `query:"page_size"`
 	PageID   uint   `query:"page_id"`
 }
+
+type ReadEncounterRequest struct {
+	EncounterID string `param:"encounter_id"`
+}
