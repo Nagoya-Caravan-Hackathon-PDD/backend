@@ -30,6 +30,7 @@ func NewRouter(db *sql.DB) *echo.Echo {
 
 	router.Health()
 	router.userRouter()
+	router.encounterRoutes()
 
 	return router.echo
 }

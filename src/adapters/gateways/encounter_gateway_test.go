@@ -13,7 +13,9 @@ import (
 	"github.com/lib/pq"
 )
 
-func createEncounter(t *testing.T, users []types.CreateUser) types.CreateEncounter {
+var users []types.CreateUser
+
+func createEncounter(t *testing.T) types.CreateEncounter {
 	arg := types.CreateEncounter{
 		EncounterID:     utils.RandomString(10),
 		UserID:          users[1].UserID,
@@ -30,12 +32,12 @@ func TestCreateEncounter(t *testing.T) {
 	defer migrateDown(t)
 
 	eg := NewEncounterGateway(dbconn)
-	var users []types.CreateUser
+
 	for i := 0; i < 2; i++ {
 		users = append(users, createOneUser(t))
 	}
 
-	createEncounter(t, users)
+	createEncounter(t)
 
 	testCases := []struct {
 		name        string
@@ -110,6 +112,44 @@ func TestCreateEncounter(t *testing.T) {
 						t.Errorf("got %v, want %v", pgErr.Code, tc.wantErrCode)
 					}
 				}
+			}
+		})
+	}
+
+	testReadOne(t)
+}
+
+func testReadOne(t *testing.T) {
+	eg := NewEncounterGateway(dbconn)
+
+	testCases := []struct {
+		name    string
+		arg     string
+		want    types.ReadEncounter
+		wantErr error
+	}{
+		{
+			name: "success",
+			arg:  "encounter_id",
+			want: types.ReadEncounter{
+				EncounterID:     "encounter_id",
+				UserID:          users[1].UserID,
+				EncountedUserID: users[0].UserID,
+				CreatedAt:       time.Now().Truncate(time.Second).UTC(),
+			},
+			wantErr: nil,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			got, err := eg.Read(tc.arg)
+			if err != tc.wantErr {
+				t.Errorf("got %v, want %v", err, tc.wantErr)
+			}
+			got.CreatedAt = got.CreatedAt.Truncate(time.Second)
+			if !reflect.DeepEqual(got, tc.want) {
+				t.Errorf("got %v, want %v", got, tc.want)
 			}
 		})
 	}
