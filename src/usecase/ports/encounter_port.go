@@ -10,5 +10,5 @@ type EncounterInput interface {
 }
 
 type EncounterOutput interface {
-	CreateEncounterResponse(err error) (int, *output.CreateEncounterResponse)
+	CreateEncounterResponse(encounterID string, err error) (int, *output.CreateEncounterResponse)
 }

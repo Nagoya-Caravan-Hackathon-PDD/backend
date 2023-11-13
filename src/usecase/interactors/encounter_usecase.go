@@ -26,7 +26,7 @@ func NewEncounterInteracter(store dai.EncounterDai, outputPort ports.EncounterOu
 
 func (i *EncounterInteracter) Create(reqBody input.CreateEncounterReqeuest) (int, *output.CreateEncounterResponse) {
 	if len(reqBody.UserID) == 0 || len(reqBody.EncountedUserID) == 0 {
-		return i.outputPort.CreateEncounterResponse(echo.ErrBadRequest)
+		return i.outputPort.CreateEncounterResponse("", echo.ErrBadRequest)
 	}
 	return i.outputPort.CreateEncounterResponse(i.store.Create(types.CreateEncounter{
 		EncounterID:     uuid.New().String(),

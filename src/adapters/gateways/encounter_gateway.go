@@ -25,26 +25,26 @@ func (eg *encounterGateway) getLocalEncounterCounts(userID, encountedUserID stri
 	return count
 }
 
-func (eg *encounterGateway) Create(arg types.CreateEncounter) error {
+func (eg *encounterGateway) Create(arg types.CreateEncounter) (string, error) {
 	const query = `INSERT INTO encounters (encounter_id,from_user_id, to_user_id,created_at) VALUES ($1,$2,$3,$4)`
 	count := eg.getLocalEncounterCounts(arg.UserID, arg.EncountedUserID)
 
 	if count != 0 {
-		return types.AlreadyExists
+		return "", types.AlreadyExists
 	}
 
 	result, err := eg.db.Exec(query, arg.EncounterID, arg.UserID, arg.EncountedUserID, arg.CreatedAt)
 	if err != nil {
-		return err
+		return "", err
 	}
 	row, err := result.RowsAffected()
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	if row != 1 {
-		return types.InsertFailed
+		return "", types.InsertFailed
 	}
 
-	return nil
+	return arg.EncounterID, nil
 }

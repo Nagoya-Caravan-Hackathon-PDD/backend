@@ -20,7 +20,7 @@ func createEncounter(t *testing.T, users []types.CreateUser) types.CreateEncount
 		EncountedUserID: users[0].UserID,
 		CreatedAt:       time.Now(),
 	}
-	if err := NewEncounterGateway(dbconn).Create(arg); err != nil {
+	if _, err := NewEncounterGateway(dbconn).Create(arg); err != nil {
 		t.Fatal(err)
 	}
 	return arg
@@ -100,7 +100,7 @@ func TestCreateEncounter(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			err := eg.Create(tc.arg)
+			_, err := eg.Create(tc.arg)
 			if reflect.TypeOf(err) != reflect.TypeOf(tc.wantErr) {
 				t.Errorf("got %v, want %s", err, reflect.TypeOf(tc.wantErr))
 			} else {
