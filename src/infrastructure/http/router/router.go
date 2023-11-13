@@ -5,29 +5,30 @@ import (
 	"net/http"
 
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/infrastructure/http/middleware"
+	"github.com/labstack/echo/v4"
+	echoMiddleware "github.com/labstack/echo/v4/middleware"
 )
 
 type router struct {
 	db         *sql.DB
-	Mux        *http.ServeMux
+	echo       *echo.Echo
 	middleware middleware.Middleware
 }
 
-func NewRouter(db *sql.DB) *router {
+func NewRouter(db *sql.DB) *echo.Echo {
 	router := &router{
 		db:         db,
-		Mux:        http.NewServeMux(),
+		echo:       echo.New(),
 		middleware: middleware.NewMiddleware(),
 	}
 
+	router.echo.Use(echoMiddleware.CORSWithConfig(echoMiddleware.CORSConfig{
+		AllowOrigins: []string{"http://localhost:3000"},
+		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
+		AllowHeaders: []string{},
+	}), echoMiddleware.Recover())
+
 	router.Health()
 
-	return router
-}
-
-func buildChain(h http.Handler, m ...func(http.Handler) http.Handler) http.Handler {
-	if len(m) == 0 {
-		return h
-	}
-	return m[0](buildChain(h, m[1:cap(m)]...))
+	return router.echo
 }

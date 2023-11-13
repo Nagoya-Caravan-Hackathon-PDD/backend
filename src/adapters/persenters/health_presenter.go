@@ -1,36 +1,21 @@
 package persenters
 
 import (
-	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/output"
 )
 
 type healthPresenter struct {
-	w http.ResponseWriter
 }
 
-func NewHealthPresenter(w http.ResponseWriter) *healthPresenter {
-	return &healthPresenter{w}
+func NewHealthPresenter() *healthPresenter {
+	return &healthPresenter{}
 }
 
-func (p *healthPresenter) Success() error {
-	p.w.WriteHeader(http.StatusOK)
-	res := output.HealthResponse{
-		Message: "OK",
+func (p *healthPresenter) Health(err error) (int, output.HealthResponse) {
+	if err != nil {
+		return http.StatusInternalServerError, output.HealthResponse{Message: "NG"}
 	}
-
-	if err := json.NewEncoder(p.w).Encode(res); err != nil {
-		http.Error(p.w, "Internal Server Error", http.StatusInternalServerError)
-		return err
-	}
-	return nil
-}
-
-func (p *healthPresenter) Failed(err error) error {
-	log.Println(err)
-	http.Error(p.w, "Internal Server Error", http.StatusInternalServerError)
-	return nil
+	return http.StatusOK, output.HealthResponse{Message: "OK"}
 }

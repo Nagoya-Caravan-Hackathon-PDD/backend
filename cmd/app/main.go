@@ -34,7 +34,7 @@ func main() {
 	} else {
 		config.LoadEnv()
 	}
-
+	log.Println(config.Config)
 	dbconn := postgres.NewConnection()
 	defer dbconn.Close(context.Background())
 
