@@ -2,7 +2,9 @@ package gateways
 
 import (
 	"database/sql"
+	"log"
 
+	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/input"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/types"
 )
 
@@ -47,4 +49,24 @@ func (eg *encounterGateway) Create(arg types.CreateEncounter) (string, error) {
 	}
 
 	return arg.EncounterID, nil
+}
+
+func (eg *encounterGateway) ReadAll(arg input.ListEncounterRequest) ([]types.ReadEncounter, error) {
+	const query = `SELECT * FROM encounters WHERE from_user_id = $1 LIMIT $2 OFFSET $3`
+	row, err := eg.db.Query(query, arg.UserID, arg.PageSize, (arg.PageID-1)*arg.PageSize)
+	if err != nil {
+		return nil, err
+	}
+	defer row.Close()
+
+	var encounters []types.ReadEncounter
+	for row.Next() {
+		var encounter types.ReadEncounter
+		if err := row.Scan(&encounter.EncounterID, &encounter.UserID, &encounter.EncountedUserID, &encounter.CreatedAt); err != nil {
+			return nil, err
+		}
+		log.Println(encounter)
+		encounters = append(encounters, encounter)
+	}
+	return encounters, nil
 }
