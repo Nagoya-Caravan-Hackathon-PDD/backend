@@ -9,11 +9,15 @@ import (
 	"time"
 
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/cmd/config"
+	"github.com/labstack/echo/v4"
 )
 
 // TODO: サーバ起動とgraceful shutdownを行う
 
-func runWithGracefulShutdown(handler *http.ServeMux) {
+func runWithGracefulShutdown(handler *echo.Echo) {
+	if handler == nil {
+		log.Fatal("handler is nil")
+	}
 
 	srv := &http.Server{
 		Addr:    config.Config.Server.Port,
