@@ -4,6 +4,8 @@ import (
 	"database/sql"
 
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/types"
+	"github.com/jackc/pgerrcode"
+	"github.com/lib/pq"
 )
 
 type userGateway struct {
@@ -34,9 +36,18 @@ func (g *userGateway) Read(userID string) (err error) {
 
 func (g *userGateway) Delete(userID string) (err error) {
 	const query = `DELETE FROM users WHERE user_id = $1`
-	row := g.db.QueryRow(query, userID)
-	if row.Err() != nil {
-		return row.Err()
+	result, err := g.db.Exec(query, userID)
+	if err != nil {
+		return err
 	}
-	return nil
+
+	count, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if count == 0 {
+		return &pq.Error{Code: pgerrcode.NoDataFound}
+	}
+	return err
 }
