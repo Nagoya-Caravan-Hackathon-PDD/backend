@@ -31,3 +31,12 @@ func (ec *encounterController) List(ctx echo.Context) error {
 	}
 	return ctx.JSON(ec.interactor.List(reqBody))
 }
+
+func (ec *encounterController) Read(ctx echo.Context) error {
+	var reqBody input.ReadEncounterRequest
+	if err := ctx.Bind(&reqBody); err != nil {
+		return echo.ErrBadRequest
+	}
+
+	return ctx.JSON(ec.interactor.Read(reqBody))
+}
