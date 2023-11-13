@@ -2,8 +2,10 @@ package router
 
 import (
 	"database/sql"
+	"net/http"
 
 	"github.com/labstack/echo/v4"
+	echoMiddleware "github.com/labstack/echo/v4/middleware"
 )
 
 type router struct {
@@ -13,18 +15,17 @@ type router struct {
 
 func NewRouter(db *sql.DB) *echo.Echo {
 	router := &router{
-		db:  db,git merge develop
-		Mux: http.NewServeMux(),
+		db:   db,
+		echo: echo.New(),
 	}
+
+	router.echo.Use(echoMiddleware.CORSWithConfig(echoMiddleware.CORSConfig{
+		AllowOrigins: []string{"http://localhost:3000"},
+		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
+		AllowHeaders: []string{},
+	}))
 
 	router.Health()
 
 	return router.echo
-}
-
-func buildChain(h http.Handler, m ...func(http.Handler) http.Handler) http.Handler {
-	if len(m) == 0 {
-		return h
-	}
-	return m[0](buildChain(h, m[1:cap(m)]...))
 }
