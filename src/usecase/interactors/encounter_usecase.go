@@ -39,7 +39,7 @@ func (i *EncounterInteracter) Create(reqBody input.CreateEncounterReqeuest) (int
 func (i *EncounterInteracter) List(arg input.ListEncounterRequest) (int, []*output.ListEncounterResponse) {
 
 	if len(arg.UserID) == 0 {
-		return i.outputPort.GetEncounterResponse(nil, echo.ErrBadRequest)
+		return i.outputPort.ListEncounterResponse(nil, echo.ErrBadRequest)
 	}
 	if arg.PageID == 0 {
 		arg.PageID = 0
@@ -47,5 +47,12 @@ func (i *EncounterInteracter) List(arg input.ListEncounterRequest) (int, []*outp
 	if arg.PageSize == 0 {
 		arg.PageSize = 10
 	}
-	return i.outputPort.GetEncounterResponse(i.store.ReadAll(arg))
+	return i.outputPort.ListEncounterResponse(i.store.ReadAll(arg))
+}
+
+func (i *EncounterInteracter) Read(arg input.ReadEncounterRequest) (int, *output.ListEncounterResponse) {
+	if len(arg.EncounterID) == 0 {
+		return i.outputPort.GetEncounterResponse(types.ReadEncounter{}, echo.ErrBadRequest)
+	}
+	return i.outputPort.GetEncounterResponse(i.store.Read(arg.EncounterID))
 }
