@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/input"
+	_ "github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/output"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/usecase/ports"
 	"github.com/labstack/echo/v4"
 )

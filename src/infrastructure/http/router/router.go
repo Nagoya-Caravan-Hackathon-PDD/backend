@@ -6,8 +6,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// TODO: ルーティングを定義する
-
 type router struct {
 	db   *sql.DB
 	echo *echo.Echo
@@ -15,11 +13,18 @@ type router struct {
 
 func NewRouter(db *sql.DB) *echo.Echo {
 	router := &router{
-		db:   db,
-		echo: echo.New(),
+		db:  db,git merge develop
+		Mux: http.NewServeMux(),
 	}
 
 	router.Health()
 
 	return router.echo
+}
+
+func buildChain(h http.Handler, m ...func(http.Handler) http.Handler) http.Handler {
+	if len(m) == 0 {
+		return h
+	}
+	return m[0](buildChain(h, m[1:cap(m)]...))
 }
