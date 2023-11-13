@@ -6,6 +6,7 @@ import (
 
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/adapters/gateways"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/adapters/presenters"
+	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/input"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/output"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/types"
 )
@@ -68,6 +69,60 @@ func TestCreate(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			status, body := ui.Create(tc.arg)
+			if status != tc.wantStatus {
+				t.Errorf("got %v, want %v", status, tc.wantStatus)
+			}
+			if body.Message != tc.wantBody.Message {
+				t.Errorf("got %v, want %v", body.Message, tc.wantBody.Message)
+			}
+		})
+	}
+	testDelete(t)
+}
+
+func testDelete(t *testing.T) {
+	ui := NewUserInteractor(gateways.NewUserGateway(dbconn), presenters.NewUserPresenter())
+	testCases := []struct {
+		name       string
+		arg        input.DeleteUsers
+		wantStatus int
+		wantBody   *output.DeleteUserResponse
+	}{
+		{
+			name: "success",
+			arg: input.DeleteUsers{
+				UserID: "test_user_id",
+			},
+			wantStatus: http.StatusOK,
+			wantBody: &output.DeleteUserResponse{
+				Message: "delete successful",
+			},
+		},
+		{
+			name: "bad request uid empty",
+			arg: input.DeleteUsers{
+				UserID: "",
+			},
+			wantStatus: http.StatusBadRequest,
+			wantBody: &output.DeleteUserResponse{
+				Message: "Bad Request",
+			},
+		},
+		{
+			name: "bad request uid not found",
+			arg: input.DeleteUsers{
+				UserID: "test_user_id",
+			},
+			wantStatus: http.StatusBadRequest,
+			wantBody: &output.DeleteUserResponse{
+				Message: "Bad Request",
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			status, body := ui.Delete(tc.arg)
 			if status != tc.wantStatus {
 				t.Errorf("got %v, want %v", status, tc.wantStatus)
 			}
