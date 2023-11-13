@@ -1,10 +1,8 @@
 package output
 
 type CreateUserResponse struct {
-	// ぎっともんの情報
-
 	// ユーザの情報
-	GitHubID string `json:"github_id"`
+	Message string `json:"message"`
 }
 
 type ReadUserResponse struct {
