@@ -36,6 +36,17 @@ func (p *userPresenter) Read(error) (int, *output.ReadUserResponse) {
 	return 0, nil
 }
 
-func (p *userPresenter) Delete(error) (int, *output.DeleteUserResponse) {
-	return 0, nil
+func (p *userPresenter) Delete(err error) (int, *output.DeleteUserResponse) {
+	if err != nil {
+		switch reflect.TypeOf(err) {
+		case reflect.TypeOf(echo.ErrBadRequest):
+			return 400, &output.DeleteUserResponse{Message: "Bad Request"}
+		case reflect.TypeOf(&pq.Error{Code: pgerrcode.NoDataFound}):
+			return 400, &output.DeleteUserResponse{Message: "Bad Request"}
+		default:
+			return 500, &output.DeleteUserResponse{Message: "Internal Server Error"}
+		}
+	}
+
+	return http.StatusOK, &output.DeleteUserResponse{Message: "delete successful"} // TODO:
 }
