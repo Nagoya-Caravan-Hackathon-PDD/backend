@@ -7,13 +7,15 @@ import (
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/usecase/interactors"
 )
 
-func (router *router) Health() {
-	hc := controllers.NewHealthController(
-		interactors.NewHealthInteractor(
-			gateways.NewHealthGateway(router.db),
-			presenters.NewHealthPresenter(),
+func (r *router) encounterRoutes() {
+	g := r.echo.Group("/v1")
+	ec := controllers.NewEncounterController(
+		interactors.NewEncounterInteracter(
+			gateways.NewEncounterGateway(r.db),
+			presenters.NewEncounterPresenter(),
 		),
 	)
 
-	router.echo.GET("/health", hc.Health)
+	g.POST("/encounters", ec.Create)
+	g.GET("/encounters", ec.List)
 }
