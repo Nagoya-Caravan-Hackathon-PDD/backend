@@ -36,7 +36,7 @@ func (p *encounterPresenter) CreateEncounterResponse(encounterID string, err err
 	}
 }
 
-func (p *encounterPresenter) GetEncounterResponse(args []types.ReadEncounter, err error) (int, []*output.ListEncounterResponse) {
+func (p *encounterPresenter) ListEncounterResponse(args []types.ReadEncounter, err error) (int, []*output.ListEncounterResponse) {
 	if err != nil {
 		switch reflect.TypeOf(err) {
 		case reflect.TypeOf(&pq.Error{}):
@@ -60,4 +60,26 @@ func (p *encounterPresenter) GetEncounterResponse(args []types.ReadEncounter, er
 		})
 	}
 	return http.StatusOK, res
+}
+
+func (p *encounterPresenter) GetEncounterResponse(args types.ReadEncounter, err error) (int, *output.ListEncounterResponse) {
+	if err != nil {
+		switch reflect.TypeOf(err) {
+		case reflect.TypeOf(&pq.Error{}):
+			return http.StatusBadRequest, nil
+		case reflect.TypeOf(echo.ErrBadRequest):
+			return http.StatusBadRequest, nil
+		case reflect.TypeOf(echo.ErrInternalServerError):
+			return http.StatusInternalServerError, nil
+		default:
+			return http.StatusInternalServerError, nil
+		}
+	}
+
+	return http.StatusOK, &output.ListEncounterResponse{
+		EncounterID:    args.EncounterID,
+		UserID:         args.UserID,
+		EncoutedUserID: args.EncountedUserID,
+		CreatedAt:      args.CreatedAt,
+	}
 }
