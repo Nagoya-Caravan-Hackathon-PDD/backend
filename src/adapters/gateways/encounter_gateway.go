@@ -68,3 +68,14 @@ func (eg *encounterGateway) ReadAll(arg input.ListEncounterRequest) ([]types.Rea
 	}
 	return encounters, nil
 }
+
+func (eg *encounterGateway) Read(encounterID string) (types.ReadEncounter, error) {
+	const query = `SELECT * FROM encounters WHERE encounter_id = $1`
+	row := eg.db.QueryRow(query, encounterID)
+
+	var encounter types.ReadEncounter
+	if err := row.Scan(&encounter.EncounterID, &encounter.UserID, &encounter.EncountedUserID, &encounter.CreatedAt); err != nil {
+		return types.ReadEncounter{}, err
+	}
+	return encounter, nil
+}
