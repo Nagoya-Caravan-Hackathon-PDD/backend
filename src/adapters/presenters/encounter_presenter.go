@@ -24,6 +24,8 @@ func (p *encounterPresenter) CreateEncounterResponse(encounterID string, err err
 			return http.StatusBadRequest, nil
 		case reflect.TypeOf(echo.ErrBadRequest):
 			return http.StatusBadRequest, nil
+		case reflect.TypeOf(types.AlreadyExists):
+			return http.StatusConflict, nil
 		case reflect.TypeOf(echo.ErrInternalServerError):
 			return http.StatusInternalServerError, nil
 		default:
@@ -68,6 +70,8 @@ func (p *encounterPresenter) GetEncounterResponse(args types.ReadEncounter, err 
 		case reflect.TypeOf(&pq.Error{}):
 			return http.StatusBadRequest, nil
 		case reflect.TypeOf(echo.ErrBadRequest):
+			return http.StatusBadRequest, nil
+		case reflect.TypeOf(types.NotFound):
 			return http.StatusBadRequest, nil
 		case reflect.TypeOf(echo.ErrInternalServerError):
 			return http.StatusInternalServerError, nil

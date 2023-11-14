@@ -5,12 +5,22 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/pkg/utils"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/adapters/gateways"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/adapters/presenters"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/input"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/output"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/types"
 )
+
+func createUser(t *testing.T) types.CreateUser {
+	arg := types.CreateUser{
+		UserID:   utils.RandomString(10),
+		GitHubID: utils.RandomString(10),
+	}
+	gateways.NewUserGateway(dbconn).Create(arg)
+	return arg
+}
 
 func TestCreate(t *testing.T) {
 	mig.Up()
