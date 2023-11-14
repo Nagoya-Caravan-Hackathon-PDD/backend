@@ -39,7 +39,6 @@ func migrateUp(t *testing.T) {
 	}
 
 	mig.Up()
-	return
 }
 
 func migrateDown(t *testing.T) {
