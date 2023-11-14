@@ -71,6 +71,8 @@ func (p *encounterPresenter) GetEncounterResponse(args types.ReadEncounter, err 
 			return http.StatusBadRequest, nil
 		case reflect.TypeOf(echo.ErrBadRequest):
 			return http.StatusBadRequest, nil
+		case reflect.TypeOf(types.NotFound):
+			return http.StatusBadRequest, nil
 		case reflect.TypeOf(echo.ErrInternalServerError):
 			return http.StatusInternalServerError, nil
 		default:

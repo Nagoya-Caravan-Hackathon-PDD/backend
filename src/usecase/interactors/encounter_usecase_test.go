@@ -12,6 +12,7 @@ import (
 )
 
 var users []types.CreateUser
+var encounterID string
 
 func TestCreateEncounter(t *testing.T) {
 	eu := NewEncounterInteracter(gateways.NewEncounterGateway(dbconn), presenters.NewEncounterPresenter())
@@ -73,9 +74,16 @@ func TestCreateEncounter(t *testing.T) {
 			if reflect.TypeOf(out) != reflect.TypeOf(tc.wantOut) {
 				t.Errorf("want message %v, but got %v", tc.wantOut, out)
 			}
+
+			if out != nil {
+				if out.EncounterID != "" {
+					encounterID = out.EncounterID
+				}
+			}
 		})
 	}
 	testListEncounter(t)
+	testReadEncounter(t)
 }
 
 func testListEncounter(t *testing.T) {
@@ -107,14 +115,6 @@ func testListEncounter(t *testing.T) {
 			wantStatus: 400,
 			wantOut:    nil,
 		},
-		{
-			name: "bad request uid not found",
-			arg: input.ListEncounterRequest{
-				UserID: "test_user_id",
-			},
-			wantStatus: 400,
-			wantOut:    nil,
-		},
 	}
 
 	for _, tc := range testCases {
@@ -128,5 +128,54 @@ func testListEncounter(t *testing.T) {
 			}
 		})
 	}
+}
 
+func testReadEncounter(t *testing.T) {
+	eu := NewEncounterInteracter(gateways.NewEncounterGateway(dbconn), presenters.NewEncounterPresenter())
+	testCases := []struct {
+		name       string
+		arg        input.GetEncounterRequest
+		wantStatus int
+		wantOut    *output.ListEncounterResponse
+	}{
+		{
+			name: "success",
+			arg: input.GetEncounterRequest{
+				EncounterID: encounterID,
+			},
+			wantStatus: 200,
+			wantOut: &output.ListEncounterResponse{
+				UserID:         users[0].UserID,
+				EncoutedUserID: users[1].UserID,
+			},
+		},
+		{
+			name: "bad request uid empty",
+			arg: input.GetEncounterRequest{
+				EncounterID: "",
+			},
+			wantStatus: 400,
+			wantOut:    nil,
+		},
+		{
+			name: "not found",
+			arg: input.GetEncounterRequest{
+				EncounterID: "not_found",
+			},
+			wantStatus: 400,
+			wantOut:    nil,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			status, out := eu.Read(tc.arg)
+			if status != tc.wantStatus {
+				t.Errorf("got %v, want %v", status, tc.wantStatus)
+			}
+			if reflect.TypeOf(out) != reflect.TypeOf(tc.wantOut) {
+				t.Errorf("got %v, want %v", out, tc.wantOut)
+			}
+		})
+	}
 }
