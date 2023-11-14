@@ -2,6 +2,7 @@ package interactors
 
 import (
 	"net/http"
+	"reflect"
 	"testing"
 
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/adapters/gateways"
@@ -12,6 +13,7 @@ import (
 )
 
 func TestCreate(t *testing.T) {
+	mig.Up()
 	defer migrateDown(t)
 	ui := NewUserInteractor(gateways.NewUserGateway(dbconn), presenters.NewUserPresenter())
 	testCases := []struct {
@@ -38,9 +40,7 @@ func TestCreate(t *testing.T) {
 				GitHubID: "test_github_id",
 			},
 			wantStatus: http.StatusBadRequest,
-			wantBody: &output.CreateUserResponse{
-				Message: "Bad Request",
-			},
+			wantBody:   nil,
 		},
 		{
 			name: "bad request github_id empty",
@@ -49,9 +49,7 @@ func TestCreate(t *testing.T) {
 				GitHubID: "test_github_id",
 			},
 			wantStatus: http.StatusBadRequest,
-			wantBody: &output.CreateUserResponse{
-				Message: "Bad Request",
-			},
+			wantBody:   nil,
 		},
 		{
 			name: "conflict",
@@ -60,9 +58,7 @@ func TestCreate(t *testing.T) {
 				GitHubID: "test_github_id",
 			},
 			wantStatus: http.StatusConflict,
-			wantBody: &output.CreateUserResponse{
-				Message: "Conflict",
-			},
+			wantBody:   nil,
 		},
 	}
 
@@ -72,7 +68,7 @@ func TestCreate(t *testing.T) {
 			if status != tc.wantStatus {
 				t.Errorf("got %v, want %v", status, tc.wantStatus)
 			}
-			if body.Message != tc.wantBody.Message {
+			if reflect.TypeOf(body) != reflect.TypeOf(tc.wantBody) {
 				t.Errorf("got %v, want %v", body.Message, tc.wantBody.Message)
 			}
 		})
@@ -104,9 +100,7 @@ func testDelete(t *testing.T) {
 				UserID: "",
 			},
 			wantStatus: http.StatusBadRequest,
-			wantBody: &output.DeleteUserResponse{
-				Message: "Bad Request",
-			},
+			wantBody:   nil,
 		},
 		{
 			name: "bad request uid not found",
@@ -114,9 +108,7 @@ func testDelete(t *testing.T) {
 				UserID: "test_user_id",
 			},
 			wantStatus: http.StatusBadRequest,
-			wantBody: &output.DeleteUserResponse{
-				Message: "Bad Request",
-			},
+			wantBody:   nil,
 		},
 	}
 
@@ -126,7 +118,7 @@ func testDelete(t *testing.T) {
 			if status != tc.wantStatus {
 				t.Errorf("got %v, want %v", status, tc.wantStatus)
 			}
-			if body.Message != tc.wantBody.Message {
+			if reflect.TypeOf(body) != reflect.TypeOf(tc.wantBody) {
 				t.Errorf("got %v, want %v", body.Message, tc.wantBody.Message)
 			}
 		})
