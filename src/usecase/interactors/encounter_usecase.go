@@ -42,7 +42,7 @@ func (i *EncounterInteracter) List(arg input.ListEncounterRequest) (int, []*outp
 		return i.outputPort.ListEncounterResponse(nil, echo.ErrBadRequest)
 	}
 	if arg.PageID == 0 {
-		arg.PageID = 0
+		arg.PageID = 1
 	}
 	if arg.PageSize == 0 {
 		arg.PageSize = 10
