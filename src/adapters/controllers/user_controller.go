@@ -62,12 +62,12 @@ func (uc *userController) GetUser(ctx echo.Context) error {
 // @Description Delete User
 // @Tags		User
 // @Produce		json
-// @Param		encounter_id			path		string						true	"create user request"
+// @Param		user_id					path		string						true	"create user request"
 // @Success		200						{object}	output.DeleteUserResponse			"success response"
 // @Failure		400						{object}	nil									"error response"
 // @Failure		409						{object}	nil									"error response"
 // @Failure		500						{object}	nil									"error response"
-// @Router		/users/:user_id			[DELETE]
+// @Router		/users/{user_id}			[DELETE]
 func (uc *userController) DeleteUsers(ctx echo.Context) error {
 	var reqQuery input.DeleteUsers
 
