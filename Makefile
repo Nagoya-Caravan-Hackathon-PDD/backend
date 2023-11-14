@@ -5,5 +5,8 @@ run:
 
 test:
 	go test -cover ./... 
+
+swaginit:
+	swag init -g cmd/app/main.go
 	
 .PHONY: startdb run test

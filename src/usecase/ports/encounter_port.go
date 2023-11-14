@@ -7,11 +7,13 @@ import (
 )
 
 type EncounterInput interface {
-	Create(arg input.CreateEncounterReqeuest) (int, *output.CreateEncounterResponse)
+	Create(arg input.CreateEncounterRequest) (int, *output.CreateEncounterResponse)
 	List(args input.ListEncounterRequest) (int, []*output.ListEncounterResponse)
+	Read(args input.GetEncounterRequest) (int, *output.ListEncounterResponse)
 }
 
 type EncounterOutput interface {
 	CreateEncounterResponse(encounterID string, err error) (int, *output.CreateEncounterResponse)
-	GetEncounterResponse(args []types.ReadEncounter, err error) (int, []*output.ListEncounterResponse)
+	ListEncounterResponse(args []types.ReadEncounter, err error) (int, []*output.ListEncounterResponse)
+	GetEncounterResponse(args types.ReadEncounter, err error) (int, *output.ListEncounterResponse)
 }

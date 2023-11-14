@@ -5,7 +5,6 @@ import "time"
 type CreateEncounterResponse struct {
 	EncounterID string `json:"encounter_id"`
 }
-
 type ListEncounterResponse struct {
 	EncounterID    string    `json:"encounter_id"`
 	UserID         string    `json:"user_id"`

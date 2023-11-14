@@ -8,4 +8,5 @@ import (
 type EncounterDai interface {
 	Create(arg types.CreateEncounter) (string, error)
 	ReadAll(arg input.ListEncounterRequest) ([]types.ReadEncounter, error)
+	Read(encounterID string) (types.ReadEncounter, error)
 }

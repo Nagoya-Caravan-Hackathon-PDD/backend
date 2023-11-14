@@ -18,4 +18,6 @@ func (r *router) encounterRoutes() {
 
 	g.POST("/encounters", ec.Create)
 	g.GET("/encounters", ec.List)
+	g.GET("/encounters/:encounter_id", ec.Read)
+
 }

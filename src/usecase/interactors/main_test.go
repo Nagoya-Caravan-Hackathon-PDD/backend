@@ -16,6 +16,7 @@ import (
 )
 
 var dbconn *sql.DB
+var mig *migrate.Migrate
 
 func migrateInstance() (mig *migrate.Migrate, err error) {
 	driver, err := postgres.WithInstance(dbconn, &postgres.Config{})
@@ -55,13 +56,11 @@ func TestMain(m *testing.M) {
 		os.Exit(1)
 	}
 
-	mig, err := migrateInstance()
+	mig, err = migrateInstance()
 	if err != nil {
 		log.Println(err)
 		os.Exit(1)
 	}
-
-	mig.Up()
 
 	os.Exit(m.Run())
 }
