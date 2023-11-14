@@ -104,7 +104,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/encounters/:encounter_id": {
+        "/encounters/{encounter_id}": {
             "get": {
                 "description": "Get All Encounters",
                 "produces": [
@@ -179,7 +179,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/:user_id": {
+        "/users/{user_id}": {
             "delete": {
                 "description": "Delete User",
                 "produces": [
@@ -193,7 +193,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "create user request",
-                        "name": "encounter_id",
+                        "name": "user_id",
                         "in": "path",
                         "required": true
                     }

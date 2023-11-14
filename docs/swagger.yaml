@@ -103,7 +103,7 @@ paths:
       summary: Create Encounter
       tags:
       - Encounter
-  /encounters/:encounter_id:
+  /encounters/{encounter_id}:
     get:
       description: Get All Encounters
       parameters:
@@ -152,13 +152,13 @@ paths:
       summary: Create User
       tags:
       - User
-  /users/:user_id:
+  /users/{user_id}:
     delete:
       description: Delete User
       parameters:
       - description: create user request
         in: path
-        name: encounter_id
+        name: user_id
         required: true
         type: string
       produces:

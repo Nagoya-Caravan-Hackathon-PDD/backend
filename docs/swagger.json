@@ -97,7 +97,7 @@
                 }
             }
         },
-        "/encounters/:encounter_id": {
+        "/encounters/{encounter_id}": {
             "get": {
                 "description": "Get All Encounters",
                 "produces": [
@@ -172,7 +172,7 @@
                 }
             }
         },
-        "/users/:user_id": {
+        "/users/{user_id}": {
             "delete": {
                 "description": "Delete User",
                 "produces": [
@@ -186,7 +186,7 @@
                     {
                         "type": "string",
                         "description": "create user request",
-                        "name": "encounter_id",
+                        "name": "user_id",
                         "in": "path",
                         "required": true
                     }
