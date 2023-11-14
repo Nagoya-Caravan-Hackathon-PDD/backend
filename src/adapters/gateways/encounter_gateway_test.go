@@ -1,12 +1,14 @@
 package gateways
 
 import (
+	"database/sql"
 	"errors"
 	"reflect"
 	"testing"
 	"time"
 
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/pkg/utils"
+	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/input"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/types"
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5/pgconn"
@@ -117,6 +119,7 @@ func TestCreateEncounter(t *testing.T) {
 	}
 
 	testReadOne(t)
+	testReadAll(t)
 }
 
 func testReadOne(t *testing.T) {
@@ -139,6 +142,12 @@ func testReadOne(t *testing.T) {
 			},
 			wantErr: nil,
 		},
+		{
+			name:    "not found",
+			arg:     "not_found_encounter_id",
+			want:    types.ReadEncounter{},
+			wantErr: sql.ErrNoRows,
+		},
 	}
 
 	for _, tc := range testCases {
@@ -150,6 +159,41 @@ func testReadOne(t *testing.T) {
 			got.CreatedAt = got.CreatedAt.Truncate(time.Second)
 			if !reflect.DeepEqual(got, tc.want) {
 				t.Errorf("got %v, want %v", got, tc.want)
+			}
+		})
+	}
+}
+
+func testReadAll(t *testing.T) {
+	eg := NewEncounterGateway(dbconn)
+
+	testCases := []struct {
+		name    string
+		arg     input.ListEncounterRequest
+		wantLen int
+		wantErr error
+	}{
+		{
+			name: "success",
+			arg: input.ListEncounterRequest{
+				UserID:   users[1].UserID,
+				PageID:   1,
+				PageSize: 10,
+			},
+			wantLen: 1,
+			wantErr: nil,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			got, err := eg.ReadAll(tc.arg)
+			if err != tc.wantErr {
+				t.Errorf("got %v, want %v", err, tc.wantErr)
+			}
+
+			if len(got) != tc.wantLen {
+				t.Errorf("got %v, want %v", len(got), tc.wantLen)
 			}
 		})
 	}

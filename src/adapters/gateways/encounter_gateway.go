@@ -77,5 +77,6 @@ func (eg *encounterGateway) Read(encounterID string) (types.ReadEncounter, error
 	if err := row.Scan(&encounter.EncounterID, &encounter.UserID, &encounter.EncountedUserID, &encounter.CreatedAt); err != nil {
 		return types.ReadEncounter{}, err
 	}
+
 	return encounter, nil
 }
