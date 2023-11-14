@@ -1,6 +1,6 @@
 package input
 
-type CreateEncounterReqeuest struct {
+type CreateEncounterRequest struct {
 	UserID          string `json:"user_id"`
 	EncountedUserID string `json:"encounted_user_id"`
 }
@@ -10,6 +10,6 @@ type ListEncounterRequest struct {
 	PageID   uint   `query:"page_id"`
 }
 
-type ReadEncounterRequest struct {
+type GetEncounterRequest struct {
 	EncounterID string `param:"encounter_id"`
 }

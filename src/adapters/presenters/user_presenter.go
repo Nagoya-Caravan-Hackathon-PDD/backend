@@ -21,11 +21,11 @@ func (p *userPresenter) Create(err error) (int, *output.CreateUserResponse) {
 	if err != nil {
 		switch reflect.TypeOf(err) {
 		case reflect.TypeOf(echo.ErrBadRequest):
-			return 400, &output.CreateUserResponse{Message: "Bad Request"}
+			return 400, nil
 		case reflect.TypeOf(&pq.Error{Code: pgerrcode.UniqueViolation}):
-			return 409, &output.CreateUserResponse{Message: "Conflict"}
+			return 409, nil
 		default:
-			return 500, &output.CreateUserResponse{Message: "Internal Server Error"}
+			return 500, nil
 		}
 	}
 
@@ -40,11 +40,11 @@ func (p *userPresenter) Delete(err error) (int, *output.DeleteUserResponse) {
 	if err != nil {
 		switch reflect.TypeOf(err) {
 		case reflect.TypeOf(echo.ErrBadRequest):
-			return 400, &output.DeleteUserResponse{Message: "Bad Request"}
+			return 400, nil
 		case reflect.TypeOf(&pq.Error{Code: pgerrcode.NoDataFound}):
-			return 400, &output.DeleteUserResponse{Message: "Bad Request"}
+			return 400, nil
 		default:
-			return 500, &output.DeleteUserResponse{Message: "Internal Server Error"}
+			return 500, nil
 		}
 	}
 

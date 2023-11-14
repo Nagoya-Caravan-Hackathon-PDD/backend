@@ -7,9 +7,9 @@ import (
 )
 
 type EncounterInput interface {
-	Create(arg input.CreateEncounterReqeuest) (int, *output.CreateEncounterResponse)
+	Create(arg input.CreateEncounterRequest) (int, *output.CreateEncounterResponse)
 	List(args input.ListEncounterRequest) (int, []*output.ListEncounterResponse)
-	Read(args input.ReadEncounterRequest) (int, *output.ListEncounterResponse)
+	Read(args input.GetEncounterRequest) (int, *output.ListEncounterResponse)
 }
 
 type EncounterOutput interface {

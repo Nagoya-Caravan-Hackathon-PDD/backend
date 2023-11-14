@@ -1,8 +1,42 @@
 basePath: /v1
 definitions:
-  output.HealthResponse:
+  input.CreateEncounterRequest:
+    properties:
+      encounted_user_id:
+        type: string
+      user_id:
+        type: string
+    type: object
+  input.CreateUser:
+    properties:
+      github_id:
+        type: string
+    type: object
+  output.CreateEncounterResponse:
+    properties:
+      encounter_id:
+        type: string
+    type: object
+  output.CreateUserResponse:
     properties:
       message:
+        description: ユーザの情報
+        type: string
+    type: object
+  output.DeleteUserResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  output.ListEncounterResponse:
+    properties:
+      created_at:
+        type: string
+      encounter_id:
+        type: string
+      encouted_user_id:
+        type: string
+      user_id:
         type: string
     type: object
 host: localhost:8080
@@ -17,21 +51,130 @@ info:
   title: PDD-GitHub-Go-Backend API
   version: "0.1"
 paths:
-  /health:
+  /encounters:
     get:
-      consumes:
-      - application/json
-      description: health check
+      description: Get All Encounters
       parameters:
       - in: query
-        name: checkDB
-        type: boolean
+        name: pageID
+        type: integer
+      - in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: userID
+        type: string
       produces:
       - application/json
       responses:
         "200":
-          description: OK
+          description: success response
           schema:
-            $ref: '#/definitions/output.HealthResponse'
-      summary: health
+            items:
+              $ref: '#/definitions/output.ListEncounterResponse'
+            type: array
+        "400":
+          description: error response
+        "500":
+          description: error response
+      summary: Get All Encounters
+      tags:
+      - Encounter
+    post:
+      description: Create Encount entory
+      parameters:
+      - description: create encounter request
+        in: body
+        name: CreateEncounterRequest
+        required: true
+        schema:
+          $ref: '#/definitions/input.CreateEncounterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success response
+          schema:
+            $ref: '#/definitions/output.CreateEncounterResponse'
+        "400":
+          description: error response
+        "500":
+          description: error response
+      summary: Create Encounter
+      tags:
+      - Encounter
+  /encounters/:encounter_id:
+    get:
+      description: Get All Encounters
+      parameters:
+      - description: list encounter request
+        in: path
+        name: encounter_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success response
+          schema:
+            $ref: '#/definitions/output.ListEncounterResponse'
+        "400":
+          description: error response
+        "500":
+          description: error response
+      summary: Get All Encounters
+      tags:
+      - Encounter
+  /users:
+    post:
+      description: Create User
+      parameters:
+      - description: create user request
+        in: body
+        name: CreateUser
+        required: true
+        schema:
+          $ref: '#/definitions/input.CreateUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success response
+          schema:
+            $ref: '#/definitions/output.CreateUserResponse'
+        "400":
+          description: error response
+        "409":
+          description: error response
+        "500":
+          description: error response
+      summary: Create User
+      tags:
+      - User
+  /users/:user_id:
+    delete:
+      description: Delete User
+      parameters:
+      - description: create user request
+        in: path
+        name: encounter_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success response
+          schema:
+            $ref: '#/definitions/output.DeleteUserResponse'
+        "400":
+          description: error response
+        "409":
+          description: error response
+        "500":
+          description: error response
+      summary: Delete User
+      tags:
+      - User
 swagger: "2.0"

@@ -24,7 +24,7 @@ func NewEncounterInteracter(store dai.EncounterDai, outputPort ports.EncounterOu
 	}
 }
 
-func (i *EncounterInteracter) Create(reqBody input.CreateEncounterReqeuest) (int, *output.CreateEncounterResponse) {
+func (i *EncounterInteracter) Create(reqBody input.CreateEncounterRequest) (int, *output.CreateEncounterResponse) {
 	if len(reqBody.UserID) == 0 || len(reqBody.EncountedUserID) == 0 {
 		return i.outputPort.CreateEncounterResponse("", echo.ErrBadRequest)
 	}
@@ -50,7 +50,7 @@ func (i *EncounterInteracter) List(arg input.ListEncounterRequest) (int, []*outp
 	return i.outputPort.ListEncounterResponse(i.store.ReadAll(arg))
 }
 
-func (i *EncounterInteracter) Read(arg input.ReadEncounterRequest) (int, *output.ListEncounterResponse) {
+func (i *EncounterInteracter) Read(arg input.GetEncounterRequest) (int, *output.ListEncounterResponse) {
 	if len(arg.EncounterID) == 0 {
 		return i.outputPort.GetEncounterResponse(types.ReadEncounter{}, echo.ErrBadRequest)
 	}

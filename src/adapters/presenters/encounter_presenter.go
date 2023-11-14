@@ -21,13 +21,13 @@ func (p *encounterPresenter) CreateEncounterResponse(encounterID string, err err
 	if err != nil {
 		switch reflect.TypeOf(err) {
 		case reflect.TypeOf(&pq.Error{}):
-			return http.StatusBadRequest, &output.CreateEncounterResponse{}
+			return http.StatusBadRequest, nil
 		case reflect.TypeOf(echo.ErrBadRequest):
-			return http.StatusBadRequest, &output.CreateEncounterResponse{}
+			return http.StatusBadRequest, nil
 		case reflect.TypeOf(echo.ErrInternalServerError):
-			return http.StatusInternalServerError, &output.CreateEncounterResponse{}
+			return http.StatusInternalServerError, nil
 		default:
-			return http.StatusInternalServerError, &output.CreateEncounterResponse{}
+			return http.StatusInternalServerError, nil
 		}
 	}
 
