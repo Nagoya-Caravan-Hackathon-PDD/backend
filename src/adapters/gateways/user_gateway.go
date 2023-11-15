@@ -25,13 +25,16 @@ func (g *userGateway) Create(arg types.CreateUser) (err error) {
 	return nil
 }
 
-func (g *userGateway) Read(userID string) (err error) {
+func (g *userGateway) Read(userID string) (*types.User, error) {
 	const query = `SELECT * FROM users WHERE user_id = $1`
+	var result types.User
 	row := g.db.QueryRow(query, userID)
-	if row.Err() != nil {
-		return row.Err()
+
+	if err := row.Scan(&result.UserID, &result.GitHubID); err != nil {
+		return nil, err
 	}
-	return nil
+
+	return &result, nil
 }
 
 func (g *userGateway) Delete(userID string) (err error) {
