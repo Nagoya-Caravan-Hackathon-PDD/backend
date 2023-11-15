@@ -6,12 +6,17 @@ import (
 	"log"
 
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/cmd/config"
+	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/driver/firebase"
 	psqlDriver "github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/driver/postgres"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/infrastructure/server"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
+
+func init() {
+	firebase.GetGoogleJWKs()
+}
 
 // @title PDD-GitHub-Go-Backend API
 // @version 0.1

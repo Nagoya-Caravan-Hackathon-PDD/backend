@@ -39,6 +39,14 @@ definitions:
       user_id:
         type: string
     type: object
+  output.ReadUserResponse:
+    properties:
+      github_id:
+        type: string
+      user_id:
+        description: ユーザの情報
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -55,6 +63,11 @@ paths:
     get:
       description: Get All Encounters
       parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - in: query
         name: pageID
         type: integer
@@ -83,6 +96,11 @@ paths:
     post:
       description: Create Encount entory
       parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: create encounter request
         in: body
         name: CreateEncounterRequest
@@ -107,6 +125,11 @@ paths:
     get:
       description: Get All Encounters
       parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: list encounter request
         in: path
         name: encounter_id
@@ -130,6 +153,11 @@ paths:
     post:
       description: Create User
       parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: create user request
         in: body
         name: CreateUser
@@ -175,6 +203,35 @@ paths:
         "500":
           description: error response
       summary: Delete User
+      tags:
+      - User
+    get:
+      description: Get any User
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create user request
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success response
+          schema:
+            $ref: '#/definitions/output.ReadUserResponse'
+        "400":
+          description: error response
+        "409":
+          description: error response
+        "500":
+          description: error response
+      summary: Get User
       tags:
       - User
 swagger: "2.0"
