@@ -14,9 +14,6 @@ func (router *router) Health() {
 			presenters.NewHealthPresenter(),
 		),
 	)
-	g := router.echo.Group("/auth")
-	g.Use(router.middleware.FirebaseAuth)
 
 	router.echo.GET("/health", hc.Health)
-	g.GET("/health", hc.AuthHealth)
 }
