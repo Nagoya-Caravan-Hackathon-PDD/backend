@@ -25,8 +25,8 @@ func NewRouter(db *sql.DB) *echo.Echo {
 	router.echo.Use(echoMiddleware.CORSWithConfig(echoMiddleware.CORSConfig{
 		AllowOrigins: []string{"http://localhost:3000"},
 		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
-		AllowHeaders: []string{},
-	}), echoMiddleware.Recover())
+		AllowHeaders: []string{middleware.AuthorizationHeaderKey},
+	}), router.middleware.FirebaseAuth, echoMiddleware.Recover())
 
 	router.Health()
 	router.userRouter()
