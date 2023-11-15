@@ -39,6 +39,14 @@ definitions:
       user_id:
         type: string
     type: object
+  output.ReadUserResponse:
+    properties:
+      github_id:
+        type: string
+      user_id:
+        description: ユーザの情報
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -175,6 +183,30 @@ paths:
         "500":
           description: error response
       summary: Delete User
+      tags:
+      - User
+    get:
+      description: Get any User
+      parameters:
+      - description: create user request
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success response
+          schema:
+            $ref: '#/definitions/output.ReadUserResponse'
+        "400":
+          description: error response
+        "409":
+          description: error response
+        "500":
+          description: error response
+      summary: Get User
       tags:
       - User
 swagger: "2.0"

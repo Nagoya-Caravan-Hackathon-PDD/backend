@@ -173,6 +173,42 @@
             }
         },
         "/users/{user_id}": {
+            "get": {
+                "description": "Get any User",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get User",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "create user request",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success response",
+                        "schema": {
+                            "$ref": "#/definitions/output.ReadUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "error response"
+                    },
+                    "409": {
+                        "description": "error response"
+                    },
+                    "500": {
+                        "description": "error response"
+                    }
+                }
+            },
             "delete": {
                 "description": "Delete User",
                 "produces": [
@@ -269,6 +305,18 @@
                     "type": "string"
                 },
                 "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "output.ReadUserResponse": {
+            "type": "object",
+            "properties": {
+                "github_id": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "description": "ユーザの情報",
                     "type": "string"
                 }
             }
