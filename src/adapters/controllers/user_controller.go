@@ -39,6 +39,7 @@ func (uc *userController) CreateUser(ctx echo.Context) error {
 	if err := ctx.Bind(&reqBody); err != nil {
 		return echo.ErrBadRequest
 	}
+
 	uid := uuid.New().String()
 	return ctx.JSON(uc.interactor.Create(types.CreateUser{
 		UserID:   uid,
@@ -46,14 +47,25 @@ func (uc *userController) CreateUser(ctx echo.Context) error {
 	}))
 }
 
+// User	godoc
+//
+// @Summary		Get User
+// @Description Get any User
+// @Tags		User
+// @Produce		json
+// @Param			user_id				path			string						true		"create user request"
+// @Success		200						{object}	output.ReadUserResponse		"success response"
+// @Failure		400						{object}	nil												"error response"
+// @Failure		409						{object}	nil												"error response"
+// @Failure		500						{object}	nil												"error response"
+// @Router		/users/{user_id}			[GET]
 func (uc *userController) GetUser(ctx echo.Context) error {
 	var reqQuery input.GetUser
-
 	if err := ctx.Bind(&reqQuery); err != nil {
 		return echo.ErrBadRequest
 	}
-	log.Println(reqQuery)
-	return nil
+
+	return ctx.JSON(uc.interactor.Read(reqQuery))
 }
 
 // User	godoc
