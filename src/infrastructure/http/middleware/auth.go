@@ -24,8 +24,10 @@ const (
 	PayloadContextKey      = "payload"
 )
 
-func FirebaseAuth(n echo.HandlerFunc) echo.HandlerFunc {
+func (m *middleware) FirebaseAuth(n echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		log.Println("FirebaseAuth")
+
 		authHeader := c.Request().Header.Get(AuthorizationHeaderKey)
 		if authHeader == "" {
 			log.Println("Authorization header is not found")
@@ -119,7 +121,7 @@ func (tv *TokenVerifier) Verify() (*types.CustomClaims, error) {
 		return nil, err
 	}
 	if claims, ok := token.Claims.(*types.CustomClaims); ok && token.Valid {
-		if time.Unix(claims.Exp, 0).Before(time.Now()) {
+		if time.Unix(claims.ExpiresAt, 0).Before(time.Now()) {
 			return nil, errors.New("Token is valid. But token is expired.")
 		} else {
 			return claims, nil
