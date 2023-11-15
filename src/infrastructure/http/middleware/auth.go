@@ -26,7 +26,6 @@ const (
 
 func (m *middleware) FirebaseAuth(n echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		log.Println("FirebaseAuth")
 
 		authHeader := c.Request().Header.Get(AuthorizationHeaderKey)
 		if authHeader == "" {
@@ -65,7 +64,7 @@ func (m *middleware) FirebaseAuth(n echo.HandlerFunc) echo.HandlerFunc {
 		tv := &TokenVerifier{tokenString: authHeaderParts[1], publicKey: publicKey}
 		claims, err := tv.Verify()
 		if err != nil {
-			log.Println("Failed to verify token")
+			log.Println("Failed to verify token", err)
 			return echo.NewHTTPError(http.StatusUnauthorized)
 		}
 
@@ -121,7 +120,7 @@ func (tv *TokenVerifier) Verify() (*types.CustomClaims, error) {
 		return nil, err
 	}
 	if claims, ok := token.Claims.(*types.CustomClaims); ok && token.Valid {
-		if time.Unix(claims.ExpiresAt, 0).Before(time.Now()) {
+		if time.Unix(claims.Exp, 0).Before(time.Now()) {
 			return nil, errors.New("Token is valid. But token is expired.")
 		} else {
 			return claims, nil
