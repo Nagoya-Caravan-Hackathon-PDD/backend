@@ -1,6 +1,7 @@
 package gateways
 
 import (
+	"database/sql"
 	"errors"
 	"reflect"
 	"testing"
@@ -89,13 +90,18 @@ func testRead(t *testing.T) {
 			arg:     "test_user_id",
 			wantErr: nil,
 		},
+		{
+			name:    "not found",
+			arg:     "not_found_user_id",
+			wantErr: sql.ErrNoRows,
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			err := g.Read(tc.arg)
+			_, err := g.Read(tc.arg)
 			if reflect.TypeOf(err) != reflect.TypeOf(tc.wantErr) {
-				t.Errorf("got %v, want %s", reflect.TypeOf(err), reflect.TypeOf(tc.wantErr))
+				t.Errorf("got %v, want %s err:%v", reflect.TypeOf(err), reflect.TypeOf(tc.wantErr), err)
 			} else {
 				var pgErr *pgconn.PgError
 				if errors.As(err, &pgErr) {
