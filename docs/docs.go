@@ -34,6 +34,13 @@ const docTemplate = `{
                 "summary": "Get All Encounters",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "type": "integer",
                         "name": "pageID",
                         "in": "query"
@@ -78,6 +85,13 @@ const docTemplate = `{
                 "summary": "Create Encounter",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "create encounter request",
                         "name": "CreateEncounterRequest",
                         "in": "body",
@@ -116,6 +130,13 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "list encounter request",
                         "name": "encounter_id",
                         "in": "path",
@@ -149,6 +170,13 @@ const docTemplate = `{
                 ],
                 "summary": "Create User",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "description": "create user request",
                         "name": "CreateUser",
@@ -189,6 +217,13 @@ const docTemplate = `{
                 ],
                 "summary": "Get User",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "create user request",

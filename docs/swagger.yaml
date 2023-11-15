@@ -63,6 +63,11 @@ paths:
     get:
       description: Get All Encounters
       parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - in: query
         name: pageID
         type: integer
@@ -91,6 +96,11 @@ paths:
     post:
       description: Create Encount entory
       parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: create encounter request
         in: body
         name: CreateEncounterRequest
@@ -115,6 +125,11 @@ paths:
     get:
       description: Get All Encounters
       parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: list encounter request
         in: path
         name: encounter_id
@@ -138,6 +153,11 @@ paths:
     post:
       description: Create User
       parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: create user request
         in: body
         name: CreateUser
@@ -188,6 +208,11 @@ paths:
     get:
       description: Get any User
       parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: create user request
         in: path
         name: user_id
