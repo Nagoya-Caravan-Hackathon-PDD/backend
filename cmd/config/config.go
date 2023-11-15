@@ -24,5 +24,8 @@ func LoadEnv(path ...string) {
 	if err := env.Parse(&config.Cockroach); err != nil {
 		log.Fatalf("env load error: %v", err)
 	}
+	if err := env.Parse(&config.Firebase); err != nil {
+		log.Fatalf("env load error: %v", err)
+	}
 	Config = config
 }

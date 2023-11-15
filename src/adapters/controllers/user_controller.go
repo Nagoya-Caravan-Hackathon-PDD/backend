@@ -25,11 +25,12 @@ func NewUserController(interactor ports.UserInput) *userController {
 // @Description Create User
 // @Tags		User
 // @Produce		json
-// @Param		CreateUser	body		input.CreateUser			true	"create user request"
-// @Success		200						{object}	output.CreateUserResponse			"success response"
-// @Failure		400						{object}	nil									"error response"
-// @Failure		409						{object}	nil									"error response"
-// @Failure		500						{object}	nil									"error response"
+// @param 		Authorization header 		string 								true 	"Authorization"
+// @Param			CreateUser		body			input.CreateUser			true	"create user request"
+// @Success		200						{object}	output.CreateUserResponse		"success response"
+// @Failure		400						{object}	nil													"error response"
+// @Failure		409						{object}	nil													"error response"
+// @Failure		500						{object}	nil													"error response"
 // @Router		/users					[POST]
 func (uc *userController) CreateUser(ctx echo.Context) error {
 	var reqBody input.CreateUser
@@ -51,6 +52,7 @@ func (uc *userController) CreateUser(ctx echo.Context) error {
 // @Description Get any User
 // @Tags		User
 // @Produce		json
+// @param 		Authorization header 		string 						true 		"Authorization"
 // @Param			user_id				path			string						true		"create user request"
 // @Success		200						{object}	output.ReadUserResponse		"success response"
 // @Failure		400						{object}	nil												"error response"

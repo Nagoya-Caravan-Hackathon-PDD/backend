@@ -26,6 +26,7 @@ func NewEncounterController(interactor ports.EncounterInput) *encounterControlle
 // @Description	Create Encount entory
 // @Tags		Encounter
 // @Produce		json
+// @param 	Authorization 					header 	string 												true 	"Authorization"
 // @Param		CreateEncounterRequest	body		input.CreateEncounterRequest	true	"create encounter request"
 // @Success		200						{object}	output.CreateEncounterResponse			"success response"
 // @Failure		400						{object}	nil										"error response"
@@ -51,7 +52,8 @@ func (ec *encounterController) Create(ctx echo.Context) error {
 // @Description	Get All Encounters
 // @Tags		Encounter
 // @Produce		json
-// @Param		ListEncounterRequest	query		input.ListEncounterRequest	true	"list encounter request"
+// @param 		Authorization 				header 	string 											true 	"Authorization"
+// @Param			ListEncounterRequest	query		input.ListEncounterRequest	true	"list encounter request"
 // @Success		200						{array}		output.ListEncounterResponse		"success response"
 // @Failure		400						{object}	nil									"error response"
 // @Failure		500						{object}	nil									"error response"
@@ -76,6 +78,7 @@ func (ec *encounterController) List(ctx echo.Context) error {
 // @Description	Get All Encounters
 // @Tags		Encounter
 // @Produce		json
+// @param 	Authorization 		header 			string 										true 	"Authorization"
 // @Param		encounter_id			path				string										true	"list encounter request"
 // @Success		200						{object}			output.ListEncounterResponse		"success response"
 // @Failure		400						{object}			nil															"error response"
