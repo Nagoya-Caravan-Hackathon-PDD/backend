@@ -3,6 +3,8 @@ package controllers
 import (
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/input"
 	_ "github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/output"
+	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/types"
+	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/infrastructure/http/middleware"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/usecase/ports"
 
 	"github.com/labstack/echo/v4"
@@ -35,6 +37,11 @@ func (ec *encounterController) Create(ctx echo.Context) error {
 		return echo.ErrBadRequest
 	}
 
+	payload := ctx.Get(middleware.PayloadContextKey).(*types.CustomClaims)
+	if reqBody.UserID != payload.UserId {
+		return echo.ErrBadRequest
+	}
+
 	return ctx.JSON(ec.interactor.Create(reqBody))
 }
 
@@ -48,13 +55,19 @@ func (ec *encounterController) Create(ctx echo.Context) error {
 // @Success		200						{array}		output.ListEncounterResponse		"success response"
 // @Failure		400						{object}	nil									"error response"
 // @Failure		500						{object}	nil									"error response"
-// @Router		/encounters				[GET]
+// @Router		/encounters		[GET]
 func (ec *encounterController) List(ctx echo.Context) error {
-	var reqBody input.ListEncounterRequest
-	if err := ctx.Bind(&reqBody); err != nil {
+	var reqQuery input.ListEncounterRequest
+	if err := ctx.Bind(&reqQuery); err != nil {
 		return echo.ErrBadRequest
 	}
-	return ctx.JSON(ec.interactor.List(reqBody))
+
+	payload := ctx.Get(middleware.PayloadContextKey).(*types.CustomClaims)
+	if reqQuery.UserID != payload.UserId {
+		return echo.ErrBadRequest
+	}
+
+	return ctx.JSON(ec.interactor.List(reqQuery))
 }
 
 // Encounter	godoc
@@ -63,16 +76,16 @@ func (ec *encounterController) List(ctx echo.Context) error {
 // @Description	Get All Encounters
 // @Tags		Encounter
 // @Produce		json
-// @Param		encounter_id			path		string						true	"list encounter request"
-// @Success		200						{object}	output.ListEncounterResponse		"success response"
-// @Failure		400						{object}	nil									"error response"
-// @Failure		500						{object}	nil									"error response"
-// @Router		/encounters/{encounter_id}			[GET]
+// @Param		encounter_id			path				string										true	"list encounter request"
+// @Success		200						{object}			output.ListEncounterResponse		"success response"
+// @Failure		400						{object}			nil															"error response"
+// @Failure		500						{object}			nil															"error response"
+// @Router		/encounters/{encounter_id}	[GET]
 func (ec *encounterController) Read(ctx echo.Context) error {
-	var reqBody input.GetEncounterRequest
-	if err := ctx.Bind(&reqBody); err != nil {
+	var reqQuery input.GetEncounterRequest
+	if err := ctx.Bind(&reqQuery); err != nil {
 		return echo.ErrBadRequest
 	}
 
-	return ctx.JSON(ec.interactor.Read(reqBody))
+	return ctx.JSON(ec.interactor.Read(reqQuery))
 }

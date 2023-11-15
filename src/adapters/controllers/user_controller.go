@@ -1,13 +1,11 @@
 package controllers
 
 import (
-	"log"
-
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/input"
 	_ "github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/output"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/types"
+	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/infrastructure/http/middleware"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/usecase/ports"
-	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
 
@@ -39,10 +37,10 @@ func (uc *userController) CreateUser(ctx echo.Context) error {
 	if err := ctx.Bind(&reqBody); err != nil {
 		return echo.ErrBadRequest
 	}
+	payload := ctx.Get(middleware.PayloadContextKey).(*types.CustomClaims)
 
-	uid := uuid.New().String()
 	return ctx.JSON(uc.interactor.Create(types.CreateUser{
-		UserID:   uid,
+		UserID:   payload.UserId,
 		GitHubID: reqBody.GitHub,
 	}))
 }
@@ -82,10 +80,13 @@ func (uc *userController) GetUser(ctx echo.Context) error {
 // @Router		/users/{user_id}			[DELETE]
 func (uc *userController) DeleteUsers(ctx echo.Context) error {
 	var reqQuery input.DeleteUsers
-
 	if err := ctx.Bind(&reqQuery); err != nil {
 		return echo.ErrBadRequest
 	}
-	log.Println(reqQuery)
-	return nil
+	payload := ctx.Get(middleware.PayloadContextKey).(*types.CustomClaims)
+
+	if reqQuery.UserID != payload.UserId {
+		return echo.ErrBadRequest
+	}
+	return ctx.JSON(uc.interactor.Delete(reqQuery))
 }
