@@ -3,7 +3,6 @@ package gateways
 import (
 	"context"
 	"database/sql"
-	"log"
 	"os"
 	"testing"
 
@@ -60,7 +59,6 @@ func TestMain(m *testing.M) {
 
 	dbconn, err = conn.Connection()
 	if err != nil {
-		log.Println(err)
 		os.Exit(1)
 	}
 
