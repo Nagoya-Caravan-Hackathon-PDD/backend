@@ -1,33 +1,23 @@
 package firebase
 
 import (
-	"encoding/json"
-	"io"
-	"log"
-	"net/http"
+	"context"
+
+	fb "firebase.google.com/go"
+	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/cmd/config"
+	"google.golang.org/api/option"
 )
 
-// TODO:SDKからJWKsを取得する
-var GoogleJWks map[string]interface{}
-
-func GetGoogleJWKs() {
-	resp, err := http.Get("https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com")
-	if err != nil {
-		log.Fatalf("Failed to make a request: %v", err)
-	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatalf("Failed to read the response body: %v", err)
+func FbApp(path string) (*fb.App, error) {
+	firebaseconfig := &fb.Config{
+		StorageBucket: config.Config.Firebase.StorageBucket,
 	}
 
-	var result map[string]interface{}
-	err = json.Unmarshal([]byte(body), &result)
-
+	serviceAccount := option.WithCredentialsFile(path)
+	app, err := fb.NewApp(context.Background(), firebaseconfig, serviceAccount)
 	if err != nil {
-		log.Fatalf("Failed to json unmarshal: %v", err)
+		return nil, err
 	}
 
-	GoogleJWks = result
+	return app, nil
 }
