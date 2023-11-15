@@ -14,6 +14,6 @@ type UserInput interface {
 
 type UserOutput interface {
 	Create(error) (int, *output.CreateUserResponse)
-	Read(error) (int, *output.ReadUserResponse)
+	Read(*types.User, error) (int, *output.ReadUserResponse)
 	Delete(error) (int, *output.DeleteUserResponse)
 }
