@@ -36,7 +36,7 @@ func (gi *gameInteractor) CreateGame(arg input.CreateGameRequest) (int, *output.
 
 	gameID := uuid.New().String()
 
-	token, err := gi.maker.CreateToken(gameID, arg.OwnerID, time.Duration(30*time.Minute))
+	token, err := gi.maker.CreateToken(gameID, arg.OwnerID, true, time.Duration(30*time.Minute))
 	if err != nil {
 		return gi.outputport.CreateGame("", "", err)
 	}
@@ -62,7 +62,7 @@ func (gi *gameInteractor) JoinGame(arg input.JoinGameRequest) (int, *output.Join
 		return gi.outputport.JoinGame("", "", echo.ErrBadRequest)
 	}
 
-	token, err := gi.maker.CreateToken(arg.GameID, arg.UserID, time.Duration(30*time.Minute))
+	token, err := gi.maker.CreateToken(arg.GameID, arg.UserID, false, time.Duration(30*time.Minute))
 	if err != nil {
 		return gi.outputport.JoinGame("", "", err)
 	}
