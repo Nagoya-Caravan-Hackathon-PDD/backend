@@ -6,6 +6,7 @@ import (
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/pkg/paseto"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/input"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/output"
+	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/types"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/usecase/dai"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/usecase/ports"
 	"github.com/google/uuid"
@@ -19,11 +20,12 @@ type gameInteractor struct {
 	outputport  ports.GameOutput
 }
 
-func NewGameInteractor(fbstore dai.FirestoreDai, gitmonstore dai.GitmonDai, outputport ports.GameOutput) *gameInteractor {
+func NewGameInteractor(fbstore dai.FirestoreDai, gitmonstore dai.GitmonDai, maker paseto.Maker, outputport ports.GameOutput) *gameInteractor {
 	return &gameInteractor{
 		fbstore:     fbstore,
 		gitmonstore: gitmonstore,
 		outputport:  outputport,
+		maker:       maker,
 	}
 }
 
@@ -38,12 +40,17 @@ func (gi *gameInteractor) CreateGame(arg input.CreateGameRequest) (int, *output.
 	if err != nil {
 		return gi.outputport.CreateGame("", "", err)
 	}
-
-	if err := gi.gitmonstore.GetGitmon(); err != nil {
+	gitmon, err := gi.gitmonstore.GetGitmonStatus(arg.OwnerID)
+	if err != nil {
 		return gi.outputport.CreateGame("", "", err)
 	}
 
-	if err := gi.fbstore.CreateGame(gameID); err != nil {
+	if err := gi.fbstore.CreateGame(types.CreateGame{
+		GameID:            gameID,
+		OwnerID:           arg.OwnerID,
+		CreatedAt:         time.Now(),
+		OwnerGitmonStatus: gitmon,
+	}); err != nil {
 		return gi.outputport.CreateGame("", "", err)
 	}
 
@@ -52,23 +59,27 @@ func (gi *gameInteractor) CreateGame(arg input.CreateGameRequest) (int, *output.
 
 func (gi *gameInteractor) JoinGame(arg input.JoinGameRequest) (int, *output.JoinGameResponse) {
 	if len(arg.GameID) == 0 || len(arg.UserID) == 0 {
-		return gi.outputport.JoinGame("", echo.ErrBadRequest)
+		return gi.outputport.JoinGame("", "", echo.ErrBadRequest)
 	}
 
 	token, err := gi.maker.CreateToken(arg.GameID, arg.UserID, time.Duration(30*time.Minute))
 	if err != nil {
-		return gi.outputport.JoinGame("", err)
+		return gi.outputport.JoinGame("", "", err)
+	}
+	gitmon, err := gi.gitmonstore.GetGitmonStatus(arg.UserID)
+	if err != nil {
+		return gi.outputport.JoinGame("", "", err)
 	}
 
-	if err := gi.gitmonstore.GetGitmon(); err != nil {
-		return gi.outputport.JoinGame("", err)
+	if err := gi.fbstore.JoinGame(types.JoinGame{
+		GameID:             arg.GameID,
+		UserID:             arg.UserID,
+		UserIDGitmonStatus: gitmon,
+	}); err != nil {
+		return gi.outputport.JoinGame("", "", err)
 	}
 
-	if err := gi.fbstore.JoinGame(arg.GameID, arg.UserID); err != nil {
-		return gi.outputport.JoinGame("", err)
-	}
-
-	return gi.outputport.JoinGame(token, nil)
+	return gi.outputport.JoinGame(token, arg.GameID, nil)
 }
 
 func (gi *gameInteractor) ListGame(arg input.ListGameRequest) (int, []*input.GetAnyGameRequest) {
