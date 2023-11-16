@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	firebase "firebase.google.com/go"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/infrastructure/http/middleware"
 	"github.com/labstack/echo/v4"
 	echoMiddleware "github.com/labstack/echo/v4/middleware"
@@ -14,14 +15,16 @@ import (
 
 type router struct {
 	db         *sql.DB
+	app        *firebase.App
 	echo       *echo.Echo
 	middleware middleware.Middleware
 }
 
-func NewRouter(db *sql.DB) *echo.Echo {
+func NewRouter(db *sql.DB, app *firebase.App) *echo.Echo {
 	router := &router{
 		db:         db,
 		echo:       echo.New(),
+		app:        app,
 		middleware: middleware.NewMiddleware(),
 	}
 
@@ -40,15 +43,22 @@ func NewRouter(db *sql.DB) *echo.Echo {
 		WithTraceID:        true,
 	}
 
+	// router.echo.Use(echoMiddleware.CORSWithConfig(echoMiddleware.CORSConfig{
+	// 	AllowOrigins: []string{"http://localhost:3000"},
+	// 	AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
+	// 	AllowHeaders: []string{middleware.AuthorizationHeaderKey},
+	// }), slogecho.NewWithConfig(logger, logConfig), router.middleware.FirebaseAuth, echoMiddleware.Recover())
+
 	router.echo.Use(echoMiddleware.CORSWithConfig(echoMiddleware.CORSConfig{
 		AllowOrigins: []string{"http://localhost:3000"},
 		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
 		AllowHeaders: []string{middleware.AuthorizationHeaderKey},
-	}), slogecho.NewWithConfig(logger, logConfig), router.middleware.FirebaseAuth, echoMiddleware.Recover())
+	}), slogecho.NewWithConfig(logger, logConfig), echoMiddleware.Recover())
 
 	router.Health()
 	router.userRouter()
 	router.encounterRoutes()
+	router.gameRouter()
 
 	return router.echo
 }

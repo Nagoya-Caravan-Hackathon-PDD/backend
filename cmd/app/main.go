@@ -62,5 +62,10 @@ func main() {
 	}
 	m.Up()
 
-	server.NewHTTPserver(db).Run()
+	app, err := firebase.FbApp("./sa.json")
+	if err != nil {
+		log.Fatalf("failed to initialize firebase app: %v", err)
+	}
+
+	server.NewHTTPserver(db, app).Run()
 }
