@@ -5,7 +5,7 @@ type CreateGameRequest struct {
 }
 
 type JoinGameRequest struct {
-	GameID string `json:"game_id"`
+	GameID string `param:"game_id"`
 	UserID string `json:"user_id"`
 }
 
