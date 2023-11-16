@@ -62,7 +62,7 @@ func main() {
 	}
 	m.Up()
 
-	app, err := firebase.FbApp("./sa.json")
+	app, err := firebase.FbApp("sa.json")
 	if err != nil {
 		log.Fatalf("failed to initialize firebase app: %v", err)
 	}
