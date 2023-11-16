@@ -14,7 +14,7 @@ type GameInput interface {
 
 type GameOutput interface {
 	CreateGame(token, gameID string, err error) (int, *output.CreateGameResponse)
-	JoinGame(token string, err error) (int, *output.JoinGameResponse)
+	JoinGame(token, gameID string, err error) (int, *output.JoinGameResponse)
 	ListGame([]*input.GetAnyGameRequest, error) (int, []*input.GetAnyGameRequest)
 	GetAnyGame(output.GetAnyGameResponse, error) (int, *output.GetAnyGameResponse)
 }

@@ -1,11 +1,12 @@
 package dai
 
+import "github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/types"
+
 type FirestoreDai interface {
-	CreateGame(string) error
-	JoinGame(string, string) error
-	UpdateGame() error
+	CreateGame(types.CreateGame) error
+	JoinGame(types.JoinGame) error
 }
 
 type GitmonDai interface {
-	GetGitmon() error
+	GetGitmonStatus(ownerID string) (types.GitmonStatus, error)
 }
