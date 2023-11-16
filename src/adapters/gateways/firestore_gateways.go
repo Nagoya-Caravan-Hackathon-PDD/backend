@@ -18,39 +18,6 @@ func NewFireStoreGateway(app *fb.App) *FireStoreGateway {
 	}
 }
 
-const data = `
-{
-	"GameID":{
-		"statuses":{
-			"OwnerID":{
-				// ここにステータス
-			},
-			"EnemyID":{
-				// ここにステータス
-			}
-		},
-		"action_logs":{
-			1:{ // 1ターン目
-				"OwnerID":{
-					// ここにコマンドと結果
-				},
-				"EnemyID":{
-					// ここにコマンドと結果
-				}
-			},
-			2:{ // 1ターン目
-				"OwnerID":{
-					// ここにコマンドと結果
-				},
-				"EnemyID":{
-					// ここにコマンドと結果
-				}
-			},
-		}
-	}
-}
-`
-
 func (fs *FireStoreGateway) CreateGame(arg types.CreateGame) error {
 	client, err := fs.app.Firestore(context.Background())
 	if err != nil {
@@ -60,8 +27,21 @@ func (fs *FireStoreGateway) CreateGame(arg types.CreateGame) error {
 
 	gamedoc := client.Collection("games").Doc(arg.GameID)
 	statuses := gamedoc.Collection("statuses")
-	statuses.Doc(arg.OwnerID).Collection("ここに自分のギットモンステータスの構造体を入れる")
-	gamedoc.Collection("action_logs")
+	_, err = statuses.Doc(arg.OwnerID).Set(context.Background(), arg.OwnerGitmonStatus)
 
-	return nil
+	return err
+}
+
+func (fs *FireStoreGateway) JoinGame(arg types.JoinGame) error {
+	client, err := fs.app.Firestore(context.Background())
+	if err != nil {
+		log.Printf("Failed to create firestore client: %v", err)
+		return err
+	}
+
+	gamedoc := client.Collection("games").Doc(arg.GameID)
+	statuses := gamedoc.Collection("statuses")
+	_, err = statuses.Doc(arg.UserID).Set(context.Background(), arg.UserIDGitmonStatus)
+
+	return err
 }
