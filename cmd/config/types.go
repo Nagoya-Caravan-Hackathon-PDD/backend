@@ -6,10 +6,15 @@ type config struct {
 	Server    Server
 	Cockroach Cockroach
 	Firebase  Firebase
+	Paseto    Paseto
 }
 
 type Server struct {
 	Port string `env:"SERVER_ADDR" envDefault:"localhost:8080"`
+}
+
+type Paseto struct {
+	SecretKey string `env:"SECRET_KEY" envDefault:"abcdefghijabcdefghijabcdefghijab"`
 }
 
 type Cockroach struct {
