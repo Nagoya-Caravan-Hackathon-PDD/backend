@@ -30,5 +30,4 @@ func (r *router) ingameRouter() {
 
 	g.POST("/game/:game_id/ready", gc.Ready)
 	g.POST("/game/:game_id/action", gc.Action)
-	g.POST("/game/:game_id/fin_turn", gc.FinTurn)
 }

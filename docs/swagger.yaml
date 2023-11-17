@@ -1,5 +1,14 @@
 basePath: /v1
 definitions:
+  input.ActionGameRequest:
+    properties:
+      command_id:
+        type: integer
+      gameID:
+        type: string
+      user_id:
+        type: string
+    type: object
   input.CreateEncounterRequest:
     properties:
       encounted_user_id:
@@ -7,14 +16,45 @@ definitions:
       user_id:
         type: string
     type: object
+  input.CreateGameRequest:
+    properties:
+      owner_id:
+        type: string
+    type: object
   input.CreateUser:
     properties:
       github_id:
         type: string
     type: object
+  input.JoinGameRequest:
+    properties:
+      gameID:
+        type: string
+      user_id:
+        type: string
+    type: object
+  input.ReadyGameRequest:
+    properties:
+      gameID:
+        type: string
+      user_id:
+        type: string
+    type: object
+  output.ActionGameResponse:
+    properties:
+      skill:
+        $ref: '#/definitions/types.Skill'
+    type: object
   output.CreateEncounterResponse:
     properties:
       encounter_id:
+        type: string
+    type: object
+  output.CreateGameResponse:
+    properties:
+      game_id:
+        type: string
+      game_server_token:
         type: string
     type: object
   output.CreateUserResponse:
@@ -26,6 +66,13 @@ definitions:
   output.DeleteUserResponse:
     properties:
       message:
+        type: string
+    type: object
+  output.JoinGameResponse:
+    properties:
+      game_id:
+        type: string
+      game_server_token:
         type: string
     type: object
   output.ListEncounterResponse:
@@ -47,6 +94,38 @@ definitions:
         description: ユーザの情報
         type: string
     type: object
+  output.ReadyGameResponse:
+    type: object
+  types.Skill:
+    properties:
+      description:
+        type: string
+      required_bp:
+        type: integer
+      skill_id:
+        description: BP制にする。毎ターン+2もらえる
+        type: integer
+      skill_name:
+        type: string
+      skill_type:
+        $ref: '#/definitions/types.SkillType'
+      skill_value:
+        type: number
+    type: object
+  types.SkillType:
+    enum:
+    - attack
+    - defence
+    - buf
+    - debuf
+    - heal
+    type: string
+    x-enum-varnames:
+    - TypeAttack
+    - TypeDefence
+    - TypeBuf
+    - TypeDebuf
+    - TypeHeal
 host: localhost:8080
 info:
   contact:
@@ -149,6 +228,122 @@ paths:
       summary: Get All Encounters
       tags:
       - Encounter
+  /game:
+    post:
+      description: Create Game
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create game request
+        in: body
+        name: CreateGameRequest
+        required: true
+        schema:
+          $ref: '#/definitions/input.CreateGameRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success response
+          schema:
+            $ref: '#/definitions/output.CreateGameResponse'
+        "400":
+          description: error response
+        "500":
+          description: error response
+      summary: Create Game
+      tags:
+      - Game
+  /game/{game_id}:
+    post:
+      description: Join Game
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create game request
+        in: body
+        name: JoinGameRequest
+        required: true
+        schema:
+          $ref: '#/definitions/input.JoinGameRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success response
+          schema:
+            $ref: '#/definitions/output.JoinGameResponse'
+        "400":
+          description: error response
+        "500":
+          description: error response
+      summary: Join Game
+      tags:
+      - Game
+  /game/{game_id}/action:
+    post:
+      description: Game Action
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create game request
+        in: body
+        name: ReadyGameRequest
+        required: true
+        schema:
+          $ref: '#/definitions/input.ActionGameRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success response
+          schema:
+            $ref: '#/definitions/output.ActionGameResponse'
+        "400":
+          description: error response
+        "500":
+          description: error response
+      summary: Game Action
+      tags:
+      - Game
+  /game/{game_id}/ready:
+    post:
+      description: Game Ready
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create game request
+        in: body
+        name: ReadyGameRequest
+        required: true
+        schema:
+          $ref: '#/definitions/input.ReadyGameRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success response
+          schema:
+            $ref: '#/definitions/output.ReadyGameResponse'
+        "400":
+          description: error response
+        "500":
+          description: error response
+      summary: Game Ready
+      tags:
+      - Game
   /users:
     post:
       description: Create User

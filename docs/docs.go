@@ -159,6 +159,182 @@ const docTemplate = `{
                 }
             }
         },
+        "/game": {
+            "post": {
+                "description": "Create Game",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Game"
+                ],
+                "summary": "Create Game",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "create game request",
+                        "name": "CreateGameRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/input.CreateGameRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success response",
+                        "schema": {
+                            "$ref": "#/definitions/output.CreateGameResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "error response"
+                    },
+                    "500": {
+                        "description": "error response"
+                    }
+                }
+            }
+        },
+        "/game/{game_id}": {
+            "post": {
+                "description": "Join Game",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Game"
+                ],
+                "summary": "Join Game",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "create game request",
+                        "name": "JoinGameRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/input.JoinGameRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success response",
+                        "schema": {
+                            "$ref": "#/definitions/output.JoinGameResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "error response"
+                    },
+                    "500": {
+                        "description": "error response"
+                    }
+                }
+            }
+        },
+        "/game/{game_id}/action": {
+            "post": {
+                "description": "Game Action",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Game"
+                ],
+                "summary": "Game Action",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "create game request",
+                        "name": "ReadyGameRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/input.ActionGameRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success response",
+                        "schema": {
+                            "$ref": "#/definitions/output.ActionGameResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "error response"
+                    },
+                    "500": {
+                        "description": "error response"
+                    }
+                }
+            }
+        },
+        "/game/{game_id}/ready": {
+            "post": {
+                "description": "Game Ready",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Game"
+                ],
+                "summary": "Game Ready",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "create game request",
+                        "name": "ReadyGameRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/input.ReadyGameRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success response",
+                        "schema": {
+                            "$ref": "#/definitions/output.ReadyGameResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "error response"
+                    },
+                    "500": {
+                        "description": "error response"
+                    }
+                }
+            }
+        },
         "/users": {
             "post": {
                 "description": "Create User",
@@ -289,6 +465,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "input.ActionGameRequest": {
+            "type": "object",
+            "properties": {
+                "command_id": {
+                    "type": "integer"
+                },
+                "gameID": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
         "input.CreateEncounterRequest": {
             "type": "object",
             "properties": {
@@ -296,6 +486,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "input.CreateGameRequest": {
+            "type": "object",
+            "properties": {
+                "owner_id": {
                     "type": "string"
                 }
             }
@@ -308,10 +506,51 @@ const docTemplate = `{
                 }
             }
         },
+        "input.JoinGameRequest": {
+            "type": "object",
+            "properties": {
+                "gameID": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "input.ReadyGameRequest": {
+            "type": "object",
+            "properties": {
+                "gameID": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "output.ActionGameResponse": {
+            "type": "object",
+            "properties": {
+                "skill": {
+                    "$ref": "#/definitions/types.Skill"
+                }
+            }
+        },
         "output.CreateEncounterResponse": {
             "type": "object",
             "properties": {
                 "encounter_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "output.CreateGameResponse": {
+            "type": "object",
+            "properties": {
+                "game_id": {
+                    "type": "string"
+                },
+                "game_server_token": {
                     "type": "string"
                 }
             }
@@ -329,6 +568,17 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "output.JoinGameResponse": {
+            "type": "object",
+            "properties": {
+                "game_id": {
+                    "type": "string"
+                },
+                "game_server_token": {
                     "type": "string"
                 }
             }
@@ -361,6 +611,50 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "output.ReadyGameResponse": {
+            "type": "object"
+        },
+        "types.Skill": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "required_bp": {
+                    "type": "integer"
+                },
+                "skill_id": {
+                    "description": "BP制にする。毎ターン+2もらえる",
+                    "type": "integer"
+                },
+                "skill_name": {
+                    "type": "string"
+                },
+                "skill_type": {
+                    "$ref": "#/definitions/types.SkillType"
+                },
+                "skill_value": {
+                    "type": "number"
+                }
+            }
+        },
+        "types.SkillType": {
+            "type": "string",
+            "enum": [
+                "attack",
+                "defence",
+                "buf",
+                "debuf",
+                "heal"
+            ],
+            "x-enum-varnames": [
+                "TypeAttack",
+                "TypeDefence",
+                "TypeBuf",
+                "TypeDebuf",
+                "TypeHeal"
+            ]
         }
     }
 }`
