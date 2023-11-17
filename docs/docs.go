@@ -222,6 +222,13 @@ const docTemplate = `{
                         "required": true
                     },
                     {
+                        "type": "integer",
+                        "description": "game id",
+                        "name": "game_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "create game request",
                         "name": "JoinGameRequest",
                         "in": "body",
@@ -258,6 +265,13 @@ const docTemplate = `{
                 ],
                 "summary": "Game Action",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "game id",
+                        "name": "game_id",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "Authorization",
@@ -317,6 +331,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/input.ReadyGameRequest"
                         }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "game id",
+                        "name": "game_id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {

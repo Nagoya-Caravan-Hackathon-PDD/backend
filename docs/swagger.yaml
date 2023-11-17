@@ -266,6 +266,11 @@ paths:
         name: Authorization
         required: true
         type: string
+      - description: game id
+        in: path
+        name: game_id
+        required: true
+        type: integer
       - description: create game request
         in: body
         name: JoinGameRequest
@@ -290,6 +295,11 @@ paths:
     post:
       description: Game Action
       parameters:
+      - description: game id
+        in: path
+        name: game_id
+        required: true
+        type: integer
       - description: Authorization
         in: header
         name: Authorization
@@ -330,6 +340,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/input.ReadyGameRequest'
+      - description: game id
+        in: path
+        name: game_id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:

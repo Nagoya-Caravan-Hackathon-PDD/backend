@@ -216,6 +216,13 @@
                         "required": true
                     },
                     {
+                        "type": "integer",
+                        "description": "game id",
+                        "name": "game_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "create game request",
                         "name": "JoinGameRequest",
                         "in": "body",
@@ -252,6 +259,13 @@
                 ],
                 "summary": "Game Action",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "game id",
+                        "name": "game_id",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "Authorization",
@@ -311,6 +325,13 @@
                         "schema": {
                             "$ref": "#/definitions/input.ReadyGameRequest"
                         }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "game id",
+                        "name": "game_id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
