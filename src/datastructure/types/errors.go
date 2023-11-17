@@ -7,3 +7,8 @@ var (
 	AlreadyExists = errors.New("already exists")
 	NotFound      = errors.New("not found")
 )
+
+var (
+	ErrBadResponse   = errors.New("bad response")
+	ErrDontHaveSkill = errors.New("don't have skill")
+)

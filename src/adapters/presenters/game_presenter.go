@@ -35,7 +35,7 @@ func (gp *GamePresenter) CreateGame(token, gameID string, err error) (int, *outp
 		GameID:          gameID,
 	}
 }
-func (gp *GamePresenter) JoinGame(gameID, token string, err error) (int, *output.JoinGameResponse) {
+func (gp *GamePresenter) JoinGame(token, gameID string, err error) (int, *output.JoinGameResponse) {
 	if err != nil {
 		log.Println(err)
 		switch reflect.TypeOf(err) {

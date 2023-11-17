@@ -59,6 +59,7 @@ func NewRouter(db *sql.DB, app *firebase.App) *echo.Echo {
 	router.userRouter()
 	router.encounterRoutes()
 	router.gameRouter()
+	router.ingameRouter()
 
 	return router.echo
 }

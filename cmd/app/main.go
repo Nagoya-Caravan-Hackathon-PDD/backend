@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"log"
 
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/cmd/config"
@@ -60,9 +61,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to Create Instance:%v", err)
 	}
-	m.Up()
+	fmt.Println(m.Up())
 
-	app, err := firebase.FbApp("./sa.json")
+	app, err := firebase.FbApp("sa.json")
 	if err != nil {
 		log.Fatalf("failed to initialize firebase app: %v", err)
 	}

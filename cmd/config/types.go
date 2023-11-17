@@ -10,7 +10,9 @@ type config struct {
 }
 
 type Server struct {
-	Port string `env:"SERVER_ADDR" envDefault:"localhost:8080"`
+	Port    string `env:"SERVER_ADDR" envDefault:"localhost:8080"`
+	WSURL   string `env:"WS_URL" envDefault:"http://localhost:8081/game_timer/"`
+	AdminID string `env:"ADMIN_ID" envDefault:"huagiuawhntuvhweiyutgvhbtwayuiethbszjhgzhufigbnISLjdgb"`
 }
 
 type Paseto struct {

@@ -1,4 +1,4 @@
-INSERT INTO users(user_id,github_id) VALUES('hoge','hoge')
+INSERT INTO users(user_id,github_id) VALUES('hoge','hoge');
 INSERT INTO users(user_id,github_id) VALUES('fuga','fuga');
 
 INSERT INTO skills(skill_id,skill_name,required_bp,skilltype,"value",description) VALUES(1,'攻撃',0,'attack',1,'通常攻撃');

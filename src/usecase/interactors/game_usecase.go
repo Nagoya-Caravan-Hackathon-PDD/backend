@@ -16,14 +16,16 @@ import (
 type gameInteractor struct {
 	fbstore     dai.FirestoreDai
 	gitmonstore dai.GitmonDai
+	ingamestore dai.InGameDai
 	maker       paseto.Maker
 	outputport  ports.GameOutput
 }
 
-func NewGameInteractor(fbstore dai.FirestoreDai, gitmonstore dai.GitmonDai, maker paseto.Maker, outputport ports.GameOutput) *gameInteractor {
+func NewGameInteractor(fbstore dai.FirestoreDai, gitmonstore dai.GitmonDai, ingamestore dai.InGameDai, maker paseto.Maker, outputport ports.GameOutput) *gameInteractor {
 	return &gameInteractor{
 		fbstore:     fbstore,
 		gitmonstore: gitmonstore,
+		ingamestore: ingamestore,
 		outputport:  outputport,
 		maker:       maker,
 	}
@@ -36,7 +38,7 @@ func (gi *gameInteractor) CreateGame(arg input.CreateGameRequest) (int, *output.
 
 	gameID := uuid.New().String()
 
-	token, err := gi.maker.CreateToken(gameID, arg.OwnerID, time.Duration(30*time.Minute))
+	token, err := gi.maker.CreateToken(gameID, arg.OwnerID, true, time.Duration(30*time.Minute))
 	if err != nil {
 		return gi.outputport.CreateGame("", "", err)
 	}
@@ -54,6 +56,10 @@ func (gi *gameInteractor) CreateGame(arg input.CreateGameRequest) (int, *output.
 		return gi.outputport.CreateGame("", "", err)
 	}
 
+	if err := gi.ingamestore.CreateGame(gameID, arg.OwnerID, gitmon.Speed); err != nil {
+		return gi.outputport.CreateGame("", "", err)
+	}
+
 	return gi.outputport.CreateGame(token, gameID, nil)
 }
 
@@ -62,12 +68,26 @@ func (gi *gameInteractor) JoinGame(arg input.JoinGameRequest) (int, *output.Join
 		return gi.outputport.JoinGame("", "", echo.ErrBadRequest)
 	}
 
-	token, err := gi.maker.CreateToken(arg.GameID, arg.UserID, time.Duration(30*time.Minute))
+	ok, err := gi.ingamestore.IsEnd(arg.GameID)
 	if err != nil {
 		return gi.outputport.JoinGame("", "", err)
 	}
+
+	if ok {
+		return gi.outputport.JoinGame("", "", echo.ErrBadRequest)
+	}
+
+	token, err := gi.maker.CreateToken(arg.GameID, arg.UserID, false, time.Duration(30*time.Minute))
+	if err != nil {
+		return gi.outputport.JoinGame("", "", err)
+	}
+
 	gitmon, err := gi.gitmonstore.GetGitmonStatus(arg.UserID)
 	if err != nil {
+		return gi.outputport.JoinGame("", "", err)
+	}
+
+	if err := gi.ingamestore.JoinGame(arg.GameID, arg.UserID, gitmon.Speed); err != nil {
 		return gi.outputport.JoinGame("", "", err)
 	}
 
