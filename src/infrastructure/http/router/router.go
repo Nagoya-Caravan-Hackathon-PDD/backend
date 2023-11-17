@@ -46,7 +46,7 @@ func NewRouter(db *sql.DB, app *firebase.App) *echo.Echo {
 	router.echo.Use(echoMiddleware.CORSWithConfig(echoMiddleware.CORSConfig{
 		AllowOrigins: []string{"http://localhost:3000"},
 		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
-		AllowHeaders: []string{middleware.AuthorizationHeaderKey},
+		AllowHeaders: []string{middleware.AuthorizationHeaderKey, "Content-Type"},
 	}), slogecho.NewWithConfig(logger, logConfig), router.middleware.FirebaseAuth, echoMiddleware.Recover())
 
 	// router.echo.Use(echoMiddleware.CORSWithConfig(echoMiddleware.CORSConfig{
