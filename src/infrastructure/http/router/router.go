@@ -43,17 +43,17 @@ func NewRouter(db *sql.DB, app *firebase.App) *echo.Echo {
 		WithTraceID:        true,
 	}
 
-	// router.echo.Use(echoMiddleware.CORSWithConfig(echoMiddleware.CORSConfig{
-	// 	AllowOrigins: []string{"http://localhost:3000"},
-	// 	AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
-	// 	AllowHeaders: []string{middleware.AuthorizationHeaderKey},
-	// }), slogecho.NewWithConfig(logger, logConfig), router.middleware.FirebaseAuth, echoMiddleware.Recover())
-
 	router.echo.Use(echoMiddleware.CORSWithConfig(echoMiddleware.CORSConfig{
 		AllowOrigins: []string{"http://localhost:3000"},
 		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
 		AllowHeaders: []string{middleware.AuthorizationHeaderKey},
-	}), slogecho.NewWithConfig(logger, logConfig), echoMiddleware.Recover())
+	}), slogecho.NewWithConfig(logger, logConfig), router.middleware.FirebaseAuth, echoMiddleware.Recover())
+
+	// router.echo.Use(echoMiddleware.CORSWithConfig(echoMiddleware.CORSConfig{
+	// 	AllowOrigins: []string{"http://localhost:3000"},
+	// 	AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
+	// 	AllowHeaders: []string{middleware.AuthorizationHeaderKey},
+	// }), slogecho.NewWithConfig(logger, logConfig), echoMiddleware.Recover())
 
 	router.Health()
 	router.userRouter()
