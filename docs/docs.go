@@ -291,10 +291,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "success response",
-                        "schema": {
-                            "$ref": "#/definitions/output.ActionGameResponse"
-                        }
+                        "description": "success response"
                     },
                     "400": {
                         "description": "error response"
@@ -342,10 +339,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "success response",
-                        "schema": {
-                            "$ref": "#/definitions/output.ReadyGameResponse"
-                        }
+                        "description": "success response"
                     },
                     "400": {
                         "description": "error response"
@@ -549,14 +543,6 @@ const docTemplate = `{
                 }
             }
         },
-        "output.ActionGameResponse": {
-            "type": "object",
-            "properties": {
-                "skill": {
-                    "$ref": "#/definitions/types.Skill"
-                }
-            }
-        },
         "output.CreateEncounterResponse": {
             "type": "object",
             "properties": {
@@ -632,50 +618,6 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
-        },
-        "output.ReadyGameResponse": {
-            "type": "object"
-        },
-        "types.Skill": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "required_bp": {
-                    "type": "integer"
-                },
-                "skill_id": {
-                    "description": "BP制にする。毎ターン+2もらえる",
-                    "type": "integer"
-                },
-                "skill_name": {
-                    "type": "string"
-                },
-                "skill_type": {
-                    "$ref": "#/definitions/types.SkillType"
-                },
-                "skill_value": {
-                    "type": "number"
-                }
-            }
-        },
-        "types.SkillType": {
-            "type": "string",
-            "enum": [
-                "attack",
-                "defence",
-                "buf",
-                "debuf",
-                "heal"
-            ],
-            "x-enum-varnames": [
-                "TypeAttack",
-                "TypeDefence",
-                "TypeBuf",
-                "TypeDebuf",
-                "TypeHeal"
-            ]
         }
     }
 }`
