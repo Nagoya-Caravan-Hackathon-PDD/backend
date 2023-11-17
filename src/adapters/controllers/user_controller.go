@@ -31,7 +31,7 @@ func NewUserController(interactor ports.UserInput) *userController {
 // @Failure		400						{object}	nil													"error response"
 // @Failure		409						{object}	nil													"error response"
 // @Failure		500						{object}	nil													"error response"
-// @Router		/users					[POST]
+// @Router		/v1/users					[POST]
 func (uc *userController) CreateUser(ctx echo.Context) error {
 	var reqBody input.CreateUser
 
@@ -58,7 +58,7 @@ func (uc *userController) CreateUser(ctx echo.Context) error {
 // @Failure		400						{object}	nil												"error response"
 // @Failure		409						{object}	nil												"error response"
 // @Failure		500						{object}	nil												"error response"
-// @Router		/users/{user_id}			[GET]
+// @Router		/v1/users/{user_id}			[GET]
 func (uc *userController) GetUser(ctx echo.Context) error {
 	var reqQuery input.GetUser
 	if err := ctx.Bind(&reqQuery); err != nil {
@@ -79,7 +79,7 @@ func (uc *userController) GetUser(ctx echo.Context) error {
 // @Failure		400						{object}	nil									"error response"
 // @Failure		409						{object}	nil									"error response"
 // @Failure		500						{object}	nil									"error response"
-// @Router		/users/{user_id}			[DELETE]
+// @Router		/v1/users/{user_id}			[DELETE]
 func (uc *userController) DeleteUsers(ctx echo.Context) error {
 	var reqQuery input.DeleteUsers
 	if err := ctx.Bind(&reqQuery); err != nil {

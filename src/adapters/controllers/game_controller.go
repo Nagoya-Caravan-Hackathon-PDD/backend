@@ -30,7 +30,7 @@ func NewGameController(interactor ports.GameInput) *gameController {
 // @Success		200						{object}	output.CreateGameResponse			"success response"
 // @Failure		400						{object}	nil														"error response"
 // @Failure		500						{object}	nil														"error response"
-// @Router		/game				[POST]
+// @Router		/v1/game				[POST]
 func (gc *gameController) Create(ctx echo.Context) error {
 	var reqBody input.CreateGameRequest
 	if err := ctx.Bind(&reqBody); err != nil {
@@ -52,7 +52,7 @@ func (gc *gameController) Create(ctx echo.Context) error {
 // @Success		200						{object}	output.JoinGameResponse			"success response"
 // @Failure		400						{object}	nil														"error response"
 // @Failure		500						{object}	nil														"error response"
-// @Router		/game/{game_id}				[POST]
+// @Router		/v1/game/{game_id}				[POST]
 func (gc *gameController) Join(ctx echo.Context) error {
 	var reqBody input.JoinGameRequest
 	if err := ctx.Bind(&reqBody); err != nil {
