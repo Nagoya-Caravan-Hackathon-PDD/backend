@@ -26,7 +26,7 @@ func NewInGameController(interactor ports.InGameInput) *ingameController {
 // @param 			Authorization 		header 	string 							true 				"Authorization"
 // @Param				ReadyGameRequest	body		input.ReadyGameRequest	true	"create game request"
 // @Param				game_id						path		integer										true	"game id"
-// @Success		200						{object}	output.ReadyGameResponse			"success response"
+// @Success		200						{object}	nil			"success response"
 // @Failure		400						{object}	nil														"error response"
 // @Failure		500						{object}	nil														"error response"
 // @Router		/game/{game_id}/ready				[POST]
@@ -48,7 +48,7 @@ func (gc *ingameController) Ready(ctx echo.Context) error {
 // @Param				game_id						path		integer										true	"game id"
 // @param 			Authorization 		header 	string 							true 				"Authorization"
 // @Param				ReadyGameRequest	body		input.ActionGameRequest	true	"create game request"
-// @Success		200						{object}			output.ActionGameResponse			"success response"
+// @Success		200						{object}			nil			"success response"
 // @Failure		400						{object}	nil														"error response"
 // @Failure		500						{object}	nil														"error response"
 // @Router		/game/{game_id}/action				[POST]

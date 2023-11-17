@@ -40,11 +40,6 @@ definitions:
       user_id:
         type: string
     type: object
-  output.ActionGameResponse:
-    properties:
-      skill:
-        $ref: '#/definitions/types.Skill'
-    type: object
   output.CreateEncounterResponse:
     properties:
       encounter_id:
@@ -94,38 +89,6 @@ definitions:
         description: ユーザの情報
         type: string
     type: object
-  output.ReadyGameResponse:
-    type: object
-  types.Skill:
-    properties:
-      description:
-        type: string
-      required_bp:
-        type: integer
-      skill_id:
-        description: BP制にする。毎ターン+2もらえる
-        type: integer
-      skill_name:
-        type: string
-      skill_type:
-        $ref: '#/definitions/types.SkillType'
-      skill_value:
-        type: number
-    type: object
-  types.SkillType:
-    enum:
-    - attack
-    - defence
-    - buf
-    - debuf
-    - heal
-    type: string
-    x-enum-varnames:
-    - TypeAttack
-    - TypeDefence
-    - TypeBuf
-    - TypeDebuf
-    - TypeHeal
 host: localhost:8080
 info:
   contact:
@@ -316,8 +279,6 @@ paths:
       responses:
         "200":
           description: success response
-          schema:
-            $ref: '#/definitions/output.ActionGameResponse'
         "400":
           description: error response
         "500":
@@ -350,8 +311,6 @@ paths:
       responses:
         "200":
           description: success response
-          schema:
-            $ref: '#/definitions/output.ReadyGameResponse'
         "400":
           description: error response
         "500":
