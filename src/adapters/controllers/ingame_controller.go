@@ -29,7 +29,7 @@ func NewInGameController(interactor ports.InGameInput) *ingameController {
 // @Success		200						{object}	nil			"success response"
 // @Failure		400						{object}	nil														"error response"
 // @Failure		500						{object}	nil														"error response"
-// @Router		/game/{game_id}/ready				[POST]
+// @Router		/v1/game/{game_id}/ready				[POST]
 func (gc *ingameController) Ready(ctx echo.Context) error {
 	var reqBody input.ReadyGameRequest
 	if err := ctx.Bind(&reqBody); err != nil {
@@ -51,7 +51,7 @@ func (gc *ingameController) Ready(ctx echo.Context) error {
 // @Success		200						{object}			nil			"success response"
 // @Failure		400						{object}	nil														"error response"
 // @Failure		500						{object}	nil														"error response"
-// @Router		/game/{game_id}/action				[POST]
+// @Router		/v1/game/{game_id}/action				[POST]
 func (gc *ingameController) Action(ctx echo.Context) error {
 	var reqBody input.ActionGameRequest
 	if err := ctx.Bind(&reqBody); err != nil {

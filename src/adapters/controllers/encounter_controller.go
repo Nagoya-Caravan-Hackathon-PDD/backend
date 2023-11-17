@@ -31,7 +31,7 @@ func NewEncounterController(interactor ports.EncounterInput) *encounterControlle
 // @Success		200						{object}	output.CreateEncounterResponse			"success response"
 // @Failure		400						{object}	nil										"error response"
 // @Failure		500						{object}	nil										"error response"
-// @Router		/encounters				[POST]
+// @Router		/v1/encounters				[POST]
 func (ec *encounterController) Create(ctx echo.Context) error {
 	var reqBody input.CreateEncounterRequest
 	if err := ctx.Bind(&reqBody); err != nil {
@@ -57,7 +57,7 @@ func (ec *encounterController) Create(ctx echo.Context) error {
 // @Success		200						{array}		output.ListEncounterResponse		"success response"
 // @Failure		400						{object}	nil									"error response"
 // @Failure		500						{object}	nil									"error response"
-// @Router		/encounters		[GET]
+// @Router		/v1/encounters		[GET]
 func (ec *encounterController) List(ctx echo.Context) error {
 	var reqQuery input.ListEncounterRequest
 	if err := ctx.Bind(&reqQuery); err != nil {
@@ -83,7 +83,7 @@ func (ec *encounterController) List(ctx echo.Context) error {
 // @Success		200						{object}			output.ListEncounterResponse		"success response"
 // @Failure		400						{object}			nil															"error response"
 // @Failure		500						{object}			nil															"error response"
-// @Router		/encounters/{encounter_id}	[GET]
+// @Router		/v1/encounters/{encounter_id}	[GET]
 func (ec *encounterController) Read(ctx echo.Context) error {
 	var reqQuery input.GetEncounterRequest
 	if err := ctx.Bind(&reqQuery); err != nil {

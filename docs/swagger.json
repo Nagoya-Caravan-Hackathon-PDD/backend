@@ -16,7 +16,7 @@
     "host": "localhost:8080",
     "basePath": "/v1",
     "paths": {
-        "/encounters": {
+        "/v1/encounters": {
             "get": {
                 "description": "Get All Encounters",
                 "produces": [
@@ -111,7 +111,7 @@
                 }
             }
         },
-        "/encounters/{encounter_id}": {
+        "/v1/encounters/{encounter_id}": {
             "get": {
                 "description": "Get All Encounters",
                 "produces": [
@@ -153,7 +153,7 @@
                 }
             }
         },
-        "/game": {
+        "/v1/game": {
             "post": {
                 "description": "Create Game",
                 "produces": [
@@ -197,7 +197,7 @@
                 }
             }
         },
-        "/game/{game_id}": {
+        "/v1/game/{game_id}": {
             "post": {
                 "description": "Join Game",
                 "produces": [
@@ -248,7 +248,7 @@
                 }
             }
         },
-        "/game/{game_id}/action": {
+        "/v1/game/{game_id}/action": {
             "post": {
                 "description": "Game Action",
                 "produces": [
@@ -296,7 +296,7 @@
                 }
             }
         },
-        "/game/{game_id}/ready": {
+        "/v1/game/{game_id}/ready": {
             "post": {
                 "description": "Game Ready",
                 "produces": [
@@ -344,7 +344,7 @@
                 }
             }
         },
-        "/users": {
+        "/v1/users": {
             "post": {
                 "description": "Create User",
                 "produces": [
@@ -391,7 +391,7 @@
                 }
             }
         },
-        "/users/{user_id}": {
+        "/v1/users/{user_id}": {
             "get": {
                 "description": "Get any User",
                 "produces": [

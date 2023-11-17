@@ -22,7 +22,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/encounters": {
+        "/v1/encounters": {
             "get": {
                 "description": "Get All Encounters",
                 "produces": [
@@ -117,7 +117,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/encounters/{encounter_id}": {
+        "/v1/encounters/{encounter_id}": {
             "get": {
                 "description": "Get All Encounters",
                 "produces": [
@@ -159,7 +159,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/game": {
+        "/v1/game": {
             "post": {
                 "description": "Create Game",
                 "produces": [
@@ -203,7 +203,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/game/{game_id}": {
+        "/v1/game/{game_id}": {
             "post": {
                 "description": "Join Game",
                 "produces": [
@@ -254,7 +254,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/game/{game_id}/action": {
+        "/v1/game/{game_id}/action": {
             "post": {
                 "description": "Game Action",
                 "produces": [
@@ -302,7 +302,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/game/{game_id}/ready": {
+        "/v1/game/{game_id}/ready": {
             "post": {
                 "description": "Game Ready",
                 "produces": [
@@ -350,7 +350,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users": {
+        "/v1/users": {
             "post": {
                 "description": "Create User",
                 "produces": [
@@ -397,7 +397,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/{user_id}": {
+        "/v1/users/{user_id}": {
             "get": {
                 "description": "Get any User",
                 "produces": [
