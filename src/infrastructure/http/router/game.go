@@ -18,6 +18,7 @@ func (r *router) gameRouter() {
 		interactors.NewGameInteractor(
 			gateways.NewFireStoreGateway(r.app),
 			gateways.NewGitmonGateway(r.db),
+			gateways.NewIngameGateway(r.db),
 			maker,
 			presenters.NewGamePresenter(),
 		),

@@ -5,6 +5,7 @@ import (
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/pkg/paseto"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/adapters/controllers"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/adapters/gateways"
+	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/adapters/gateways/ws"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/adapters/presenters"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/usecase/interactors"
 )
@@ -14,12 +15,14 @@ func (r *router) ingameRouter() {
 	if err != nil {
 		panic(err)
 	}
-	gc := controllers.NewGameController(
-		interactors.NewGameInteractor(
+
+	gc := controllers.NewInGameController(
+		interactors.NewIngameInteractor(
+			gateways.NewIngameGateway(r.db),
 			gateways.NewFireStoreGateway(r.app),
-			gateways.NewGitmonGateway(r.db),
+			ws.NewWSRequest(),
 			maker,
-			presenters.NewGamePresenter(),
+			presenters.NewIngamePresenter(),
 		),
 	)
 

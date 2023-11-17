@@ -3,6 +3,7 @@ package ws
 import (
 	"bytes"
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/cmd/config"
@@ -17,8 +18,24 @@ func NewWSRequest() *WSRequest {
 }
 
 func (r *WSRequest) Start(times int, token string) error {
+	return r.timer(times, token, types.FlagStart)
+}
+
+func (r *WSRequest) Turn(times int, token string) error {
+	return r.timer(times, token, types.FlagTurn)
+}
+
+func (r *WSRequest) Result(times int, token string) error {
+	return r.timer(times, token, types.FlagResult)
+}
+
+func (r *WSRequest) End(times int, token string) error {
+	return r.timer(times, token, types.FlagEnd)
+}
+
+func (r *WSRequest) timer(times int, token string, flag types.MessageType) error {
 	request := types.WSRequest{
-		MessageType: types.FlagStart,
+		MessageType: flag,
 		Time:        times,
 	}
 	data, err := json.Marshal(request)
@@ -40,9 +57,7 @@ func (r *WSRequest) Start(times int, token string) error {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		return types.ErrBadResponse
-	}
+	log.Println(resp.StatusCode)
 
 	return nil
 }

@@ -3,6 +3,7 @@ package ports
 import (
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/input"
 	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/output"
+	"github.com/Nagoya-Caravan-Hackathon-PDD/backend/src/datastructure/types"
 )
 
 type InGameInput interface {
@@ -11,6 +12,6 @@ type InGameInput interface {
 }
 
 type InGameOutput interface {
-	ReadyGame(*output.ReadyGameResponse) error
-	ActionGame(*output.ActionGameResponse) error
+	ReadyGame(err error) (int, *output.ReadyGameResponse)
+	ActionGame(skill *types.Skill, err error) (int, *output.ActionGameResponse)
 }

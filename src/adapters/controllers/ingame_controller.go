@@ -16,25 +16,25 @@ func NewInGameController(interactor ports.InGameInput) *ingameController {
 	}
 }
 
-func (gc *gameController) Ready(ctx echo.Context) error {
+func (gc *ingameController) Ready(ctx echo.Context) error {
 	var reqBody input.ReadyGameRequest
 	if err := ctx.Bind(&reqBody); err != nil {
 		return echo.ErrBadRequest
 	}
 
-	return nil
+	return ctx.JSON(gc.interactor.ReadyGame(reqBody))
 }
 
-func (gc *gameController) Action(ctx echo.Context) error {
+func (gc *ingameController) Action(ctx echo.Context) error {
 	var reqBody input.ActionGameRequest
 	if err := ctx.Bind(&reqBody); err != nil {
 		return echo.ErrBadRequest
 	}
 
-	return nil
+	return ctx.JSON(gc.interactor.ActionGame(reqBody))
 }
 
-func (gc *gameController) FinTurn(ctx echo.Context) error {
+func (gc *ingameController) FinTurn(ctx echo.Context) error {
 	var reqBody input.FinTurnRequest
 	if err := ctx.Bind(&reqBody); err != nil {
 		return echo.ErrBadRequest
