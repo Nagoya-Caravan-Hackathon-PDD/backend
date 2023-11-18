@@ -47,7 +47,7 @@ func (gc *gameController) Create(ctx echo.Context) error {
 // @Tags				Game
 // @Produce			json
 // @param 			Authorization 		header 	string 							true 				"Authorization"
-// @Param				game_id						path		integer										true	"game id"
+// @Param				game_id						path		string										true	"game id"
 // @Param				JoinGameRequest	body		input.JoinGameRequest	true	"create game request"
 // @Success		200						{object}	output.JoinGameResponse			"success response"
 // @Failure		400						{object}	nil														"error response"
