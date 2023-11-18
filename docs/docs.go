@@ -267,7 +267,7 @@ const docTemplate = `{
                 "summary": "Game Action",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "game id",
                         "name": "game_id",
                         "in": "path",
@@ -331,7 +331,7 @@ const docTemplate = `{
                         }
                     },
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "game id",
                         "name": "game_id",
                         "in": "path",

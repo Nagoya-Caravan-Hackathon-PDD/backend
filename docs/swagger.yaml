@@ -262,7 +262,7 @@ paths:
         in: path
         name: game_id
         required: true
-        type: integer
+        type: string
       - description: Authorization
         in: header
         name: Authorization
@@ -305,7 +305,7 @@ paths:
         in: path
         name: game_id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:

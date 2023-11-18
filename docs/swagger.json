@@ -260,7 +260,7 @@
                 "summary": "Game Action",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "game id",
                         "name": "game_id",
                         "in": "path",
@@ -324,7 +324,7 @@
                         }
                     },
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "game id",
                         "name": "game_id",
                         "in": "path",
