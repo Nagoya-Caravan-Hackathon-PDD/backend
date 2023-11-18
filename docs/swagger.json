@@ -216,7 +216,7 @@
                         "required": true
                     },
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "game id",
                         "name": "game_id",
                         "in": "path",

@@ -233,7 +233,7 @@ paths:
         in: path
         name: game_id
         required: true
-        type: integer
+        type: string
       - description: create game request
         in: body
         name: JoinGameRequest
